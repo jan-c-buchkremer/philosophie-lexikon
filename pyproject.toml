@@ -1,0 +1,29 @@
+[project]
+name = "philosophie-lexikon"
+version = "0.1.0"
+description = "Structured dataset and 2D atlas of the Enzyklopaedie Philosophie und Wissenschaftstheorie"
+requires-python = ">=3.11"
+
+# Until now this repo had no dependency manifest at all -- scripts were run
+# ad-hoc via `uv run python` and picked their imports up from whatever
+# happened to be installed. Everything the pipeline actually imports is
+# declared here; `uv sync` is the setup step.
+dependencies = [
+    # --- extraction stage (scripts/extract_markdown.py, derive_cmaps.py) ---
+    # Already imported by the existing pipeline; previously undeclared.
+    "pymupdf>=1.24",
+    "pymupdf4llm>=0.0.17",
+    "pikepdf>=9.0",
+    # --- atlas stage (pipeline/) ---
+    # igraph carries both the graph model and the C-speed force layouts;
+    # leidenalg supplies Leiden, which (unlike Louvain) guarantees the
+    # communities it returns are internally connected.
+    "numpy>=1.26",
+    "python-igraph>=0.11",
+    "leidenalg>=0.10",
+    "python-dotenv>=1.0",
+    "fonttools>=4.64.0",
+]
+
+[tool.uv]
+package = false

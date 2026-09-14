@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "generated_utc": "2026-09-12T10:59:05Z",
+  "source": "Enzyklopädie Philosophie und Wissenschaftstheorie, 8 volumes",
+  "row_counts": {
+    "entries.jsonl": 4627,
+    "edges.csv": 59942,
+    "lemmas.csv": 5746,
+    "ambiguous.csv": 1827
+  },
+  "entries_by_type": {
+    "biography": 1135,
+    "redirect": 367,
+    "subject_article": 2402,
+    "unknown": 723
+  },
+  "entries_by_volume": {
+    "Bd01_A-B": 728,
+    "Bd02_C-F": 664,
+    "Bd03_G-Inn": 486,
+    "Bd04_Ins-Loc": 472,
+    "Bd05_Log-N": 516,
+    "Bd06_O-Ra": 490,
+    "Bd07_Re-Te": 624,
+    "Bd08_Th-Z": 647
+  },
+  "cross_references": {
+    "total": 59942,
+    "by_status": {
+      "ambiguous": 623,
+      "cross_volume": 39280,
+      "deinflected": 6879,
+      "same_volume": 8663,
+      "slash_half": 2678,
+      "unresolved": 1819
+    },
+    "cleanly_resolved": 57500,
+    "cleanly_resolved_share": 0.9593
+  },
+  "unreadable_chars_total": 4082,
+  "notes": [
+    "Text fields come in pairs: *_raw / body_text is verbatim from extraction, *_clean has markup removed. U+FFFD marks a glyph the source PDF's font tables could not decode; it is preserved, never guessed at, and counted in unreadable_chars.",
+    "In cleaned text '^x' was a superscript. It is AMBIGUOUS by nature: in a citation it is an edition number, in prose a mathematical exponent, and the source markup does not distinguish them.",
+    "edges.csv includes unresolved references (empty target_entry_id) so the file is a complete account of the source's cross-references.",
+    "Entries are never merged across volumes. Where several entries share a lemma they are distinct senses; see lemmas.csv and the lemma_conflicts view."
+  ]
+}

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atlas der Enzyklopädie Philosophie und Wissenschaftstheorie</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="map"></canvas>
+
+  <header class="top">
+    <div class="brand">
+      <h1>Atlas</h1>
+      <p>Enzyklopädie Philosophie und Wissenschaftstheorie</p>
+    </div>
+
+    <div class="find">
+      <input id="search" type="search" placeholder="Lemma suchen …" autocomplete="off" spellcheck="false">
+      <ul id="results" hidden></ul>
+    </div>
+
+    <div class="top-end">
+      <p id="status"></p>
+      <button id="reset" type="button">Ansicht zurücksetzen</button>
+    </div>
+  </header>
+
+  <aside id="filters" class="filters">
+    <button class="filters-tab" type="button" aria-expanded="true" aria-controls="filters-body">Filter</button>
+    <div class="filters-body" id="filters-body">
+      <section class="filters-section">
+        <header class="filters-head">
+          <p class="legend-title">Felder</p>
+          <span class="filters-links">
+            <button type="button" data-clusters="all">alle</button>
+            <button type="button" data-clusters="none">keine</button>
+          </span>
+        </header>
+        <ul class="cluster-list"></ul>
+      </section>
+
+      <section class="filters-section">
+        <header class="filters-head">
+          <p class="legend-title">Artikel</p>
+        </header>
+        <input class="article-search" type="search" placeholder="Artikel suchen …" autocomplete="off" spellcheck="false">
+        <p class="filters-direction">
+          <button class="edge-toggle" type="button" data-direction="incoming" aria-pressed="true"
+                  title="Artikel, die auf den gewählten verweisen"><i></i>Verwiesen von</button>
+          <button class="edge-toggle" type="button" data-direction="outgoing" aria-pressed="true"
+                  title="Artikel, auf die der gewählte verweist"><i></i>Verweist auf</button>
+        </p>
+        <ul class="article-list"></ul>
+      </section>
+
+      <footer class="filters-foot">
+        <label class="filters-override">
+          <input type="checkbox" data-override>
+          Auswahl zeigt alle Nachbarn
+        </label>
+        <p class="filters-status"></p>
+        <button class="filters-reset" type="button" data-reset>Filter zurücksetzen</button>
+        <p class="legend-foot">Lage ergibt sich aus den Querverweisen der Herausgeber, nicht aus dem Wortlaut.</p>
+      </footer>
+    </div>
+  </aside>
+
+  <div id="loading" class="loading"><p>Atlas wird geladen …</p></div>
+  <div id="tooltip" class="tooltip" hidden></div>
+  <article id="pane" class="pane" hidden></article>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

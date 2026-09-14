@@ -1,0 +1,583 @@
+/* Atlas — dark ground, serif voice.
+ *
+ * The source is a printed German scholarly encyclopedia, so the reading
+ * surfaces are set in a serif and the interface stays out of the way.
+ * Sans is reserved for numbers and labels: anything that is apparatus
+ * rather than text. Chrome is deliberately thin — there is one view and
+ * one filter, so there is nothing to build a toolbar around.
+ */
+
+:root {
+  --ink: #0e0f13;
+  --ink-raised: #16181f;
+  --ink-edge: #262a35;
+  --text: #e8e6e1;
+  --text-soft: #a2a7b4;
+  --text-faint: #6f7686;
+  --accent: #ffb86b;
+  --accent-cool: #7ec8e3;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --pane-width: 460px;
+}
+
+* { box-sizing: border-box; }
+
+/* Several elements below set an explicit `display`, which would otherwise
+   beat the browser's default `[hidden] { display: none }` and leave the
+   loading screen and the pane permanently on top of the map. */
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+#map {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* --- top bar ------------------------------------------------------------ */
+
+.top {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  padding: 18px 24px;
+  /* A gradient rather than a filled bar: the map should run under the
+     chrome, not stop at it. */
+  background: linear-gradient(to bottom, rgba(14, 15, 19, 0.94) 30%, rgba(14, 15, 19, 0));
+  pointer-events: none;
+}
+.top > * { pointer-events: auto; }
+
+/* The pane sits above the header, so with an article open the header has
+   to stop where the pane begins -- otherwise the search box disappears
+   underneath it exactly when you want to look something else up. */
+body.pane-open .top { padding-right: calc(var(--pane-width) + 24px); }
+
+.brand h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.brand p {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.find {
+  position: relative;
+  flex: 1;
+  max-width: 380px;
+  margin-left: auto;
+}
+
+#search {
+  width: 100%;
+  padding: 9px 14px;
+  border: 1px solid var(--ink-edge);
+  border-radius: 3px;
+  background: rgba(22, 24, 31, 0.92);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 15px;
+}
+#search::placeholder { color: var(--text-faint); font-family: var(--sans); font-size: 13px; }
+#search:focus { outline: none; border-color: var(--accent); }
+
+#results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  max-height: 58vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--ink-raised);
+  border: 1px solid var(--ink-edge);
+  border-radius: 3px;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.6);
+}
+#results li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+#results li:hover { background: rgba(255, 184, 107, 0.1); }
+.hit-lemma { font-family: var(--serif); font-size: 14.5px; }
+.hit-target { color: var(--accent); font-size: 12.5px; font-family: var(--serif); }
+.hit-note { margin-left: auto; color: var(--text-faint); font-size: 11px; }
+.hit-empty { color: var(--text-faint); cursor: default; }
+.hit-empty:hover { background: none; }
+
+.top-end { text-align: right; }
+#status {
+  margin: 0 0 7px;
+  font-size: 11.5px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+#reset {
+  padding: 5px 11px;
+  border: 1px solid var(--ink-edge);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--text-soft);
+  font-family: var(--sans);
+  font-size: 11.5px;
+  cursor: pointer;
+}
+#reset:hover { border-color: var(--accent); color: var(--accent); }
+
+/* --- filter bar --------------------------------------------------------- */
+
+/* The left panel: the fields (what the legend used to be) and the citation
+   filter. It slides off screen rather than hiding, so the tab that brings
+   it back is part of the same element and the map can measure whichever
+   of the two is showing. */
+.filters {
+  position: fixed;
+  left: 0;
+  top: 84px;
+  bottom: 22px;
+  z-index: 9;
+  width: 270px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.22s ease;
+}
+body.filters-collapsed .filters { transform: translateX(-100%); }
+
+.filters-tab {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  padding: 7px 5px;
+  border: 1px solid var(--ink-edge);
+  border-left: none;
+  border-radius: 0 3px 3px 0;
+  background: rgba(19, 21, 27, 0.97);
+  color: var(--text-soft);
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  cursor: pointer;
+  /* Read by filters.js: 1 means the bar starts closed on this screen. */
+  --small: 0;
+}
+.filters-tab:hover { color: var(--accent); }
+.filters-tab::after { content: " ◂"; }
+body.filters-collapsed .filters-tab::after { content: " ▸"; }
+
+.filters-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  padding: 14px 14px 12px;
+  background: rgba(19, 21, 27, 0.97);
+  border: 1px solid var(--ink-edge);
+  border-left: none;
+  border-radius: 0 3px 3px 0;
+}
+
+.filters-section { display: flex; flex-direction: column; min-height: 0; }
+/* The fields keep their rows (scrolling past ~40% of the height); the
+   article list takes whatever is left. */
+.filters-section:first-child { flex: 0 0 auto; }
+.filters-section:nth-child(2) { flex: 1 1 160px; }
+.filters-head { display: flex; align-items: baseline; justify-content: space-between; }
+.filters-links button,
+.filters-reset {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-faint);
+  font-family: var(--sans);
+  font-size: 11px;
+  cursor: pointer;
+}
+.filters-links button + button { margin-left: 8px; }
+.filters-links button:hover,
+.filters-reset:hover { color: var(--accent); }
+
+.legend-title,
+.legend-foot {
+  margin: 0;
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.legend-foot {
+  margin-top: 9px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.cluster-list,
+.article-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  min-height: 0;
+}
+.cluster-list { max-height: 38vh; }
+.article-list { flex: 1; }
+.cluster-list li,
+.article-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 5px;
+  border-radius: 2px;
+  font-size: 12px;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+.cluster-list li:hover,
+.article-list li:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); }
+.cluster-list input,
+.article-list input,
+.filters-override input {
+  margin: 0;
+  width: 12px;
+  height: 12px;
+  flex: 0 0 auto;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.cluster-list i { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.cluster-list span,
+.article-list span {
+  font-family: var(--serif);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cluster-list span { cursor: pointer; }
+.cluster-list span:hover { color: var(--accent); }
+.cluster-list b,
+.article-list b { margin-left: auto; font-weight: 400; font-size: 11px; color: var(--text-faint); }
+/* A field switched off fades as a row, the way its nodes fade on the map. */
+.cluster-list li.is-off { opacity: 0.45; }
+.article-list li.is-on span { color: var(--accent); }
+.article-list .hit-empty { color: var(--text-faint); }
+
+.article-search {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--ink-edge);
+  border-radius: 3px;
+  background: rgba(22, 24, 31, 0.92);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 13.5px;
+}
+.article-search::placeholder { color: var(--text-faint); font-family: var(--sans); font-size: 12px; }
+.article-search:focus { outline: none; border-color: var(--accent); }
+
+.filters-direction { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
+
+.filters-foot { flex: 0 0 auto; border-top: 1px solid var(--ink-edge); padding-top: 10px; }
+.filters-override {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+.filters-status {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.filters-reset { margin-top: 4px; }
+
+/* --- tooltip ------------------------------------------------------------ */
+
+.tooltip {
+  position: fixed;
+  z-index: 20;
+  padding: 5px 10px;
+  background: rgba(10, 11, 15, 0.95);
+  border: 1px solid var(--ink-edge);
+  border-radius: 2px;
+  font-family: var(--serif);
+  font-size: 14px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--text-faint);
+  font-family: var(--serif);
+  font-size: 16px;
+  text-align: center;
+}
+.loading .hint { font-family: var(--sans); font-size: 12.5px; }
+.loading code { color: var(--accent); }
+
+/* --- reading pane ------------------------------------------------------- */
+
+/* Slides over the map rather than resizing it: a relayout would move every
+   node under the reader's cursor at the moment they clicked one. */
+.pane {
+  position: fixed;
+  top: 0; right: 0;
+  z-index: 15;
+  width: var(--pane-width);
+  max-width: 100vw;
+  height: 100%;
+  overflow-y: auto;
+  padding: 26px 30px 60px;
+  background: rgba(19, 21, 27, 0.97);
+  border-left: 1px solid var(--ink-edge);
+  box-shadow: -26px 0 60px rgba(0, 0, 0, 0.5);
+}
+
+.pane-close {
+  position: absolute;
+  top: 16px; right: 18px;
+  width: 26px; height: 26px;
+  border: none;
+  background: none;
+  color: var(--text-faint);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.pane-close:hover { color: var(--accent); }
+
+.pane-loading { color: var(--text-faint); font-family: var(--serif); }
+
+.pane-head { padding-right: 30px; border-bottom: 1px solid var(--ink-edge); padding-bottom: 16px; }
+.pane-kicker {
+  margin: 0 0 6px;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.pane-head h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 27px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.pane-meta { margin: 8px 0 0; font-size: 12px; color: var(--text-soft); }
+.pane-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+.pane-stats b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.pane-region { display: inline-flex; align-items: center; gap: 6px; }
+.pane-region i { width: 7px; height: 7px; border-radius: 50%; }
+
+/* Direction switches. The swatch is the map's own line colour, so this
+   row is the key for what is drawn behind the pane and the control for
+   it at the same time. */
+.edge-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px 3px 6px;
+  border: 1px solid var(--ink-edge);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-soft);
+  font-family: var(--sans);
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.edge-toggle:hover { border-color: var(--text-faint); color: var(--text); }
+.edge-toggle i {
+  width: 9px;
+  height: 3px;
+  border-radius: 2px;
+  /* A bar, not a dot: it stands for a line on the map, and the region
+     swatch beside it is the dot. */
+}
+.edge-toggle b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Off reads as struck through rather than merely faded, so the state is
+   legible at a glance instead of needing a comparison. */
+.edge-toggle.is-off { opacity: 0.42; text-decoration: line-through; }
+.edge-toggle.is-off i { background: var(--text-faint) !important; }
+
+.pane-body {
+  margin: 20px 0 26px;
+  font-family: var(--serif);
+  font-size: 15.5px;
+  line-height: 1.62;
+  /* The body arrives as one string with the source's own line breaks and
+     character offsets pointing into it; pre-wrap preserves the paragraphs
+     without splitting the string and invalidating those offsets. */
+  white-space: pre-wrap;
+  hyphens: auto;
+}
+
+.xref-arrow { color: var(--text-faint); }
+a.xref {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 184, 107, 0.3);
+  cursor: pointer;
+}
+a.xref:hover { border-bottom-color: var(--accent); }
+
+/* An unresolvable reference is shown, not hidden: the resolver recorded
+   that it could not tell which entry was meant, and the reading pane
+   should carry that uncertainty rather than quietly dropping the word. */
+.xref-dead {
+  color: var(--text-soft);
+  border-bottom: 1px dotted var(--text-faint);
+  cursor: help;
+}
+
+.pane-section { margin-top: 8px; border-top: 1px solid var(--ink-edge); padding-top: 12px; }
+.pane-section summary {
+  cursor: pointer;
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  list-style: none;
+}
+.pane-section summary::-webkit-details-marker { display: none; }
+.pane-section summary::before { content: "▸ "; }
+.pane-section[open] summary::before { content: "▾ "; }
+.pane-section summary:hover { color: var(--text-soft); }
+.pane-section .count { color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.pane-section h4 {
+  margin: 14px 0 5px;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+.ref-list {
+  columns: 2;
+  column-gap: 20px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--serif);
+  font-size: 13.5px;
+}
+.ref-list li { break-inside: avoid; margin-bottom: 4px; line-height: 1.35; }
+.ref-list a { color: var(--accent-cool); text-decoration: none; cursor: pointer; }
+.ref-list a:hover { text-decoration: underline; }
+.ref-dead { color: var(--text-faint); }
+.ref-dead em { font-size: 10.5px; font-family: var(--sans); font-style: normal; opacity: 0.7; }
+
+.pane-note,
+.pane-empty {
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.bib-text {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-soft);
+  white-space: pre-wrap;
+}
+
+/* --- small screens -------------------------------------------------------
+ *
+ * On a phone the pane cannot slide over the map: at 100vw it would replace
+ * it, and the point of the atlas is seeing where an article sits while you
+ * read it. So here -- and only here -- the map gives up room instead. The
+ * canvas stays anchored top-left, so its pixel coordinates remain client
+ * coordinates and the obstacle boxes keep working unchanged; main.js
+ * re-measures it whenever the pane opens or closes.
+ */
+@media (max-width: 900px), (max-height: 520px) {
+  /* Starts closed (filters.js reads --small); open, it covers the map
+     the way the pane does, and the tab brings it back. */
+  .filters { top: 60px; bottom: 0; width: min(270px, 80vw); }
+  .filters-tab { --small: 1; }
+  .brand p { display: none; }
+  .top { gap: 14px; padding: 12px 16px; }
+  #status { display: none; }
+  .pane { padding: 20px 20px 50px; }
+  .pane-close { top: 12px; right: 12px; }
+  .pane-head h2 { font-size: 23px; }
+  .pane-body { font-size: 15px; }
+}
+
+/* Upright: map above, article below. */
+@media (max-width: 900px) and (orientation: portrait) {
+  :root { --pane-width: 100vw; }
+  /* The header floats over the map, which the pane no longer covers. */
+  body.pane-open .top { padding-right: 16px; }
+  body.pane-open #map { height: 42%; }
+  .pane {
+    top: auto;
+    bottom: 0;
+    height: 58%;
+    border-left: none;
+    border-top: 1px solid var(--ink-edge);
+    box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* On its side: map left, article right. */
+@media (max-width: 900px) and (orientation: landscape), (max-height: 520px) and (orientation: landscape) {
+  :root { --pane-width: 50vw; }
+  body.pane-open #map { width: 50%; }
+}
