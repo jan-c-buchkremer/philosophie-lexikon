@@ -1,0 +1,222 @@
+{
+  "_comment": "Golden/regression cases for scripts/resolve_xrefs.py, per docs/pipeline-strategy.md strategy #8 (sibling of tests/golden_entries.json, which covers the entry parser). Cases identify their citing entry by (entry_volume, entry_headword) and the occurrence by (raw_target, raw_context) -- NOT by entry id. Ids embed an ordinal and shift whenever a re-extraction changes the entry count, which made the whole suite fail on drift while saying nothing about correctness. Expected targets are likewise asserted by headword. Every case below was verified against the live structured-data/lexikon.db. Run scripts/check_golden_xrefs.py after any change to resolve_xrefs.py.",
+  "cases": [
+    {
+      "name": "same-volume direct match",
+      "entry_volume": "Bd07_Re-Te",
+      "entry_headword": "Read",
+      "raw_target": "Realität",
+      "checks": {
+        "status": "same_volume",
+        "resolved_headword_startswith": "Realität",
+        "redirect_hops": 0
+      }
+    },
+    {
+      "name": "qualified reference resolves to the SPECIFIC entry via multi-word context ('›Logik, algebraische' -> the 'Logik, algebraische' entry, not the generic 'Logik,') -- the whole point of capturing the words after the arrow",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "Abacus",
+      "raw_target": "Logik",
+      "raw_context": "Logik, algebraische",
+      "checks": {
+        "status": "cross_volume",
+        "resolved_headword_startswith": "Logik, algebraische",
+        "match_words": 2
+      }
+    },
+    {
+      "name": "BARE 'Logik' (no qualifier in the source) resolves to the base 'Logik' entry. Re-derived: this case previously expected Bd03's 'Logik,', which was the truncated headword of 'Hegelsche Logik' -- a two-line headword whose first line went untagged, so the fragment impersonated the base entry and captured every bare reference to Logik in the corpus. The real base entry is Bd05's 'Logik'. Re-pointed a second time: the previous citing entry ('Logik, antike') carried this as a ›Logik‹ QUOTATION, not a reference, so it stopped being captured once Bd01-06's arrow became ↑. 'Logik, indische' cites the base entry with a genuine arrow.",
+      "entry_volume": "Bd05_Log-N",
+      "entry_headword": "Logik, indische",
+      "raw_target": "Logik",
+      "raw_context": "Logik",
+      "checks": {
+        "status": "same_volume",
+        "resolved_headword": "Logik"
+      }
+    },
+    {
+      "name": "de-inflected match (Seienden -> strip 'n' -> Seiende, das)",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "ab alio",
+      "raw_target": "Seienden",
+      "checks": {
+        "status": "deinflected",
+        "suffix_stripped": "n",
+        "resolved_headword_startswith": "Seiende, das"
+      }
+    },
+    {
+      "name": "slash-compound reference resolves: the editors write the WHOLE compound after the arrow ('›objektiv/Objektivität') while build_index() only holds each half, so the verbatim lookup matched nothing -- 2,969 references. Guards both the half-indexing and the whole-compound split.",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "Abbildtheorie",
+      "raw_target": "objektiv/Objektivität",
+      "checks": {
+        "status": "slash_half",
+        "resolved_headword": "objektiv/Objektivität"
+      }
+    },
+    {
+      "name": "redirect chase: '›Bildtheorie' hits a redirect entry and is followed through to its target. Guards the arrow-cut tiebreak -- a redirect's body names its target, so full_trim must cut at the arrow or no redirect can win its tiebreak and no chase happens.",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "Abbild",
+      "raw_target": "Bildtheorie",
+      "checks": {
+        "status": "same_volume",
+        "resolved_headword": "Bild",
+        "redirect_hops": 1
+      }
+    },
+    {
+      "name": "a qualified reference beats a redirect chase: '›ens rationis' resolves to the 'ens rationis' entry directly, NOT via ens -> redirect -> 'Seiende, das' (which is where first-word-only matching sent it, producing a wrong edge)",
+      "entry_volume": "Bd03_G-Inn",
+      "entry_headword": "Gedankending",
+      "raw_target": "ens",
+      "raw_context": "ens rationis",
+      "checks": {
+        "resolved_headword_startswith": "ens rationis",
+        "match_words": 2,
+        "redirect_hops": 0
+      }
+    },
+    {
+      "name": "lemma PREFIX indexing: '›a priori' resolves even though the stored headword is 'a priori, fundamentaler Terminus' (the entry tagger's anchor swallowed body text) -- indexing only the whole stored string left ~79 references unresolved",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "Allmacht",
+      "raw_target": "a",
+      "raw_context": "a priori",
+      "checks": {
+        "resolved_headword_startswith": "a priori",
+        "match_words": 2
+      }
+    },
+    {
+      "name": "genuine irreducible ambiguity must surface as 'ambiguous', never guessed: several equally-plausible entries and no privileged base entry to fall back on.",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "Abravanel",
+      "raw_target": "Makrokosmos",
+      "checks": {
+        "status": "ambiguous",
+        "resolved_entry_id": null,
+        "candidates_include_headwords": [
+          "Makrokosmos",
+          "Makrokosmos"
+        ]
+      }
+    },
+    {
+      "name": "a rejoined hyphenation produces a real edge: Aristoteles' '›Konven-' / 'tionalismus' (split across a page break) resolves to the Konventionalismus entry -- 190 such fragments corpus-wide were unresolvable before the rejoin",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "Aristoteles",
+      "raw_target": "Konventionalismus",
+      "raw_context": "Konventionalismus",
+      "checks": {
+        "status": "cross_volume",
+        "resolved_headword_startswith": "Konventionalismus"
+      }
+    },
+    {
+      "name": "a German SUSPENDED hyphen is never rejoined: '›Lehr- und Lernsituation' must stay 'Lehr-' (joining it would fabricate 'Lehrund' and lose the edge) -- and the multi-word context then resolves it to the 'Lehr- und Lernsituation' entry, whose own headword carries the same hyphen",
+      "entry_volume": "Bd03_G-Inn",
+      "entry_headword": "Handlung",
+      "raw_target": "Lehr-",
+      "raw_context": "Lehr- und Lernsituation",
+      "checks": {
+        "status": "cross_volume",
+        "resolved_headword": "Lehr- und Lernsituation"
+      }
+    },
+    {
+      "name": "single-letter first words are excluded from the FIRST-WORD index (they magnetised 208 references onto 'I Ching') but kept in the LEMMA index, so '›I Ching' still resolves on its full phrase. The bare-'I' half of this guard is now moot: those references were quotations of the syllogistic judgment symbol and are no longer captured at all.",
+      "entry_volume": "Bd06_O-Ra",
+      "entry_headword": "Philosophie, chinesische",
+      "raw_target": "I",
+      "checks": {
+        "status": "cross_volume",
+        "resolved_headword": "I Ching",
+        "match_words": 2
+      }
+    },
+    {
+      "name": "an arrow followed by an opening guillemet is a reference, not a quotation: '↑›Ich‹' in Autonomie resolves to the 'Ich' entry -- TARGET_CHARS excludes '›' (it is also the quotation mark), so before the matcher accepted an optional '›' after the arrow these 1,100 references were never captured at all",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "Autonomie",
+      "raw_target": "Ich",
+      "raw_context": "Ich",
+      "checks": {
+        "status": "cross_volume",
+        "resolved_headword": "Ich"
+      }
+    },
+    {
+      "name": "the closing guillemet delimits the whole target phrase: '↑›Rettung der Phänomene‹' arrives as multi-word context and resolves to the 'Rettung der Phänomene' entry, not to a bare 'Rettung'",
+      "entry_volume": "Bd01_A-B",
+      "entry_headword": "Astronomie",
+      "raw_target": "Rettung",
+      "raw_context": "Rettung der Phänomene",
+      "checks": {
+        "status": "cross_volume",
+        "resolved_headword": "Rettung der Phänomene",
+        "match_words": 3
+      }
+    }
+  ],
+  "aggregate_checks": [
+    {
+      "name": "matched-at-all rate (resolved + ambiguous) stays high. History: 60-72% while German quotations were still being captured as references; 95.7% once they were not (ISSUES.md issue #12).",
+      "statuses": [
+        "same_volume",
+        "cross_volume",
+        "deinflected",
+        "slash_half",
+        "ambiguous"
+      ],
+      "min_rate": 0.92,
+      "max_rate": 0.99
+    },
+    {
+      "name": "cleanly-resolved rate (excluding ambiguous) -- a separate check, so a tiebreak regression that converts clean resolutions into false ambiguity (or vice versa) is caught even though the combined rate would not move. History: 45.0% on the first working version, 56.7% after multi-word context matching, 58.8% after the font fix and hyphen rejoin, 94.6% after the quotation fix, the clean-headword rewrite and the slash-compound lookup.",
+      "statuses": [
+        "same_volume",
+        "cross_volume",
+        "deinflected",
+        "slash_half"
+      ],
+      "min_rate": 0.91,
+      "max_rate": 0.98
+    },
+    {
+      "name": "ambiguous rate stays low -- 18.9% before multi-word context matching, 5.3% before disambiguating parentheticals were kept in the lemma, 1.0% now. A regression in the context capture or the lemma index shows up here first.",
+      "statuses": [
+        "ambiguous"
+      ],
+      "min_rate": 0.0,
+      "max_rate": 0.03
+    },
+    {
+      "name": "every cross_references row has exactly one resolved_cross_references row",
+      "one_to_one_with_cross_references": true
+    },
+    {
+      "name": "a German quotation is NOT captured as a cross-reference: Abbagnano's '›Möglichkeit der Seinsbeziehung‹' is quoted, not referenced. '›...‹' is the German quotation mark as well as Bd01-06's Verweispfeil, and every quoted word used to become a reference -- 27% of all captures, 6,148 of them false edges in the graph.",
+      "absent_reference": {
+        "entry_volume": "Bd01_A-B",
+        "entry_headword": "Abbagnano",
+        "raw_target": "Möglichkeit"
+      }
+    },
+    {
+      "name": "no bare German article is EVER captured as a cross-reference, in any entry -- guards the article-attractor fix (indexing 'absurd/das Absurde' under 'das' produced 42 spurious edges, all pointing at whichever article-headword shared the citing entry's volume). This was a per-entry 'resolves to nothing' case while '›' was Bd01-06's Verweispfeil and articles were captured from quotations; now that the arrow is '↑' they are never captured, which is the stronger claim, so the guard asserts absence across the whole corpus rather than in one entry.",
+      "absent_reference_corpus": {
+        "raw_targets": [
+          "das",
+          "der",
+          "die",
+          "dem",
+          "den",
+          "des"
+        ]
+      }
+    }
+  ]
+}

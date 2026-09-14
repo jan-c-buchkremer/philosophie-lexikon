@@ -1,0 +1,123 @@
+{
+  "_comment": "Golden/regression snapshot cases for scripts/parse_entries.py, per docs/pipeline-strategy.md strategy #8. Each case pins down a specific behavior that was manually verified once (see ISSUES.md / conversation history) -- run scripts/check_golden.py after any change to parse_entries.py to catch silent regressions before a full re-run. 'checks' fields are asserted with the semantics documented in check_golden.py.",
+  "cases": [
+    {
+      "name": "Bd01 redirect (simple)",
+      "checks": {
+        "entry_type": "redirect",
+        "flags": [
+          "heading_promoted"
+        ],
+        "cross_references_raw": [
+          "Seele"
+        ],
+        "werke_raw": null,
+        "literatur_raw": null,
+        "author_sigil": null
+      },
+      "volume": "Bd01_A-B",
+      "headword": "anima"
+    },
+    {
+      "name": "Bd01 redirect with multi-word target (only first word captured, per structure-notes.md §7's own stated convention)",
+      "checks": {
+        "entry_type": "redirect",
+        "cross_references_raw": [
+          "a"
+        ]
+      },
+      "volume": "Bd01_A-B",
+      "headword": "a posteriori"
+    },
+    {
+      "name": "Bd01 split-headword-across-two-markers merge (subject article) -- guards the line-anchored-regex bug (marker mid-line was invisible, leaked raw HTML comment into body_text) and the false-merge-of-short-redirects regression (wrong threshold merged 34 genuine redirects into their next entry)",
+      "checks": {
+        "entry_type": "subject_article",
+        "flags": [
+          "split_headword_merged"
+        ],
+        "author_sigil": "F. G.",
+        "body_text_startswith": "erkenntnistheoretischer, von P. K. Feyerabend",
+        "body_text_not_contains": [
+          "<!-- entry:",
+          "<!-- page:"
+        ]
+      },
+      "volume": "Bd01_A-B",
+      "headword": "Anarchismus, erkenntnistheoretischer"
+    },
+    {
+      "name": "Bd01 split-headword-across-two-markers merge (biography)",
+      "checks": {
+        "entry_type": "biography",
+        "flags": [
+          "split_headword_merged"
+        ],
+        "author_sigil": "J. M."
+      },
+      "volume": "Bd01_A-B",
+      "headword": "Biedermann, Gustav"
+    },
+    {
+      "name": "Bd01 multi-page subject article -- guards the page-break rejoin bug (hyphenated word split across a page, e.g. 'Steue-'/'rung', got a spurious paragraph break instead of joining)",
+      "checks": {
+        "entry_type": "subject_article",
+        "werke_raw": null,
+        "literatur_raw_not_null": true,
+        "author_sigil": "S. B.",
+        "pdf_page_start": 475,
+        "pdf_page_end": 476,
+        "body_text_endswith": "(↑Freiheit (handlungstheoretisch)).",
+        "body_text_not_contains": [
+          "<!-- page:",
+          "\n\n\n"
+        ]
+      },
+      "volume": "Bd01_A-B",
+      "headword": "Bewußtsein"
+    },
+    {
+      "name": "Bd04 false-positive 'Werke:' inside a Literatur citation title -- guards the karma/K. regression (a cited edition titled 'K., Werke: Fragmente...' was wrongly read as this entry's own Werke: section)",
+      "volume": "Bd04_Ins-Loc",
+      "headword_startswith": "karma",
+      "checks": {
+        "entry_type": "subject_article",
+        "werke_raw": null,
+        "literatur_raw_not_null": true
+      }
+    },
+    {
+      "name": "Bd07 end-to-end: ties together the MT-Symbol arrow CMap fix (ISSUES.md issue #5) and the parser's per-volume xref_arrow config -- only correct if both agree",
+      "checks": {
+        "entry_type": "biography",
+        "author_sigil": "J. M.",
+        "werke_raw_not_null": true,
+        "literatur_raw_not_null": true,
+        "pdf_page_start": 21,
+        "pdf_page_end": 21,
+        "printed_page_start": 1,
+        "cross_references_raw_includes": [
+          "Empirismus",
+          "Phänomenalismus",
+          "Realität"
+        ]
+      },
+      "volume": "Bd07_Re-Te",
+      "headword": "Read"
+    }
+  ],
+  "aggregate_checks": [
+    {
+      "name": "Bd01 redirect count stays at 58 -- guards the false-merge regression from collapsing short redirects into their next entry. 52 while headwords were stored as raw anchors; 58 now that they are the typesetter own bold run, which tags redirects the anchor form missed.",
+      "volume": "Bd01_A-B",
+      "entry_type": "redirect",
+      "expect_count": 58
+    },
+    {
+      "name": "Bd01 split_headword_merged count stays at exactly 2",
+      "volume": "Bd01_A-B",
+      "flag": "split_headword_merged",
+      "expect_count": 2
+    }
+  ]
+}

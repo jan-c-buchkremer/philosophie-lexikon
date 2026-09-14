@@ -1,0 +1,164 @@
+<!doctype html>
+<!-- Temporary headless smoke test; exercises the real modules and reports
+     into #out so `chrome --headless --dump-dom` can read the result. -->
+<html lang="de">
+<head><meta charset="utf-8"><title>smoke</title></head>
+<body>
+<canvas id="map" style="width:900px;height:600px"></canvas>
+<div id="tooltip" hidden></div>
+<article id="pane" hidden></article>
+<pre id="out"></pre>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script type="module">
+import { loadGraph, loadEntry, loadBibliography } from './js/data.js';
+import { Search } from './js/search.js';
+import { Atlas } from './js/atlas.js';
+import { Sidebar } from './js/sidebar.js';
+
+const out = document.getElementById('out');
+let failures = 0;
+const ok = (name, cond, detail = '') => {
+  if (!cond) failures++;
+  out.textContent += `${cond ? 'PASS' : 'FAIL'}  ${name}${cond ? '' : ' :: ' + detail}\n`;
+};
+
+try {
+  const { graph, search: rows } = await loadGraph();
+  ok('graph loads', graph.ids.length === 4260, `${graph.ids.length} nodes`);
+  ok('adjacency built', graph.adjacency.out.length === graph.ids.length);
+  const edgeCount = graph.adjacency.out.reduce((a, l) => a + l.length, 0);
+  ok('adjacency holds every edge', edgeCount === graph.edges.source.length,
+     `${edgeCount} vs ${graph.edges.source.length}`);
+
+  // --- search ---
+  const search = new Search(rows, graph);
+  const anima = search.query('anima');
+  ok('search finds a redirect alias', anima.length > 0 && anima.some(h => h.target === 'Seele'),
+     JSON.stringify(anima.slice(0, 3)));
+  const kant = search.query('Kant');
+  ok('search finds a biography', kant.some(h => graph.headwords[h.node].startsWith('Kant')),
+     JSON.stringify(kant.slice(0, 2)));
+  ok('umlaut folds', search.query('Asthetik').length > 0 || search.query('Ästhetik').length > 0);
+  const inverted = search.query('algebraische Logik');
+  ok('inverted form is findable', inverted.length > 0, JSON.stringify(inverted.slice(0, 2)));
+  ok('matchingNodes returns a set', search.matchingNodes('logik') instanceof Set);
+  ok('short query is ignored', search.query('a').length === 0);
+  // The map filter must not narrow to the dropdown's cap; it shows the
+  // query's whole footprint.
+  const wide = search.matchingNodes('logik');
+  ok('map filter is not capped at the result limit', wide.size > search.query('logik').length,
+     `${wide.size} lit vs ${search.query('logik').length} listed`);
+
+  // --- atlas ---
+  const canvas = document.getElementById('map');
+  let selected = 'none', hovered = 'none';
+  const atlas = new Atlas(canvas, graph, {
+    onSelect: (n) => { selected = n; },
+    onHover: (n) => { hovered = n; },
+  });
+  ok('atlas constructed and drew', true);
+
+  const hub = graph.in_degree.indexOf(Math.max(...graph.in_degree));
+  atlas.select(hub);
+  ok('select fires onSelect', selected === hub, `${selected}`);
+  atlas.draw();
+  ok('draw with a selection (edges + rings)', true);
+
+  atlas.hover = hub;
+  atlas.draw();
+  atlas.setMatches(search.matchingNodes('logik'));
+  atlas.draw();
+  ok('draw with search matches', true);
+  atlas.setMatches(null);
+  atlas.flyTo(hub);
+  atlas.resetView();
+  ok('flyTo and resetView', Number.isFinite(atlas.transform.k));
+
+  const found = atlas.quadtree.find(graph.x[hub], graph.y[hub], 50);
+  ok('quadtree hit-tests to a node', found !== undefined);
+
+  // --- entry payloads + sidebar ---
+  const entry = await loadEntry(graph, hub);
+  ok('entry payload loads', entry && entry.headword === graph.headwords[hub],
+     entry ? entry.headword : 'null');
+  ok('entry carries references', Array.isArray(entry.refs) && entry.refs.length > 0);
+
+  const sidebar = new Sidebar(document.getElementById('pane'), graph, { onNavigate: () => {} });
+  await sidebar.show(hub);
+  const pane = document.getElementById('pane');
+  ok('sidebar renders the headword',
+     pane.querySelector('h2') && pane.querySelector('h2').textContent === entry.headword,
+     pane.querySelector('h2') ? pane.querySelector('h2').textContent : 'no h2');
+
+  const links = pane.querySelectorAll('.pane-body a.xref');
+  ok('body has inline reference links', links.length > 0, `${links.length}`);
+  const bad = [...links].filter(a => {
+    const n = Number(a.dataset.node);
+    return !Number.isInteger(n) || n < 0 || n >= graph.ids.length;
+  });
+  ok('every inline link targets a real node', bad.length === 0, `${bad.length} bad`);
+
+  // The linkified body must still contain the original text verbatim.
+  const rendered = pane.querySelector('.pane-body').textContent;
+  ok('linkify preserves the article text', rendered === entry.body,
+     `rendered ${rendered.length} chars vs source ${entry.body.length}`);
+
+  ok('reference list rendered', pane.querySelectorAll('.ref-list a').length > 0);
+
+  // --- edge direction toggles ---
+  const edgeView = { incoming: true, outgoing: true };
+  const toggling = new Sidebar(pane, graph, { onNavigate: () => {}, edgeView,
+                                              onEdgeToggle: () => atlas.draw() });
+  await toggling.show(hub);
+  const buttons = pane.querySelectorAll('.edge-toggle');
+  ok('both direction toggles render', buttons.length === 2, `${buttons.length}`);
+  ok('toggle counts match the adjacency',
+     buttons[0].textContent.includes(String(graph.adjacency.inc[hub].length)) &&
+     buttons[1].textContent.includes(String(graph.adjacency.out[hub].length)));
+  buttons[0].click();
+  ok('clicking a toggle flips the shared state', edgeView.incoming === false);
+  ok('the button shows it is off', buttons[0].classList.contains('is-off'));
+  atlas.edgeView = edgeView;
+  atlas.draw();
+  ok('map draws with one direction hidden', true);
+  buttons[0].click();
+  ok('clicking again restores it', edgeView.incoming === true);
+
+  // --- an entry that failed the linkify gate must still render ---
+  const shardIds = graph.ids.filter(id => id.startsWith('Bd07'));
+  let plainTested = false;
+  for (const id of shardIds.slice(0, 400)) {
+    const e = await loadEntry(graph, graph.index.get(id));
+    if (e && !e.marks && e.body) {
+      await sidebar.show(graph.index.get(id));
+      ok('an un-linkified entry still renders its text',
+         pane.querySelector('.pane-body').textContent === e.body);
+      plainTested = true;
+      break;
+    }
+  }
+  if (!plainTested) ok('an un-linkified entry still renders its text', true, 'none in sample');
+
+  // --- bibliography shard ---
+  const withBib = graph.ids.findIndex((id, i) => i < 500 && id.startsWith('Bd01'));
+  let bibOk = false;
+  for (let i = 0; i < 200; i++) {
+    const e = await loadEntry(graph, i);
+    if (e && e.has_bib) {
+      const b = await loadBibliography(graph, i);
+      bibOk = !!(b && (b.werke || b.literatur));
+      break;
+    }
+  }
+  ok('bibliography shard resolves', bibOk);
+
+} catch (err) {
+  failures++;
+  out.textContent += `FAIL  threw :: ${err && err.stack ? err.stack : err}\n`;
+}
+
+out.textContent += `\n${failures === 0 ? 'ALL SMOKE CHECKS PASSED' : failures + ' SMOKE FAILURES'}\n`;
+document.title = failures === 0 ? 'SMOKE-OK' : 'SMOKE-FAIL';
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# environment / caches
+.venv/
+.atlas-cache/
+__pycache__/
+*.pyc
+.claude/
+scratchpad/
+
+# copyrighted source corpus and full-text derivatives (kept local only)
+pdf-data/
+md-data/
+structured-data/
+export/entries.jsonl
+export/viz/
+viz/data/
