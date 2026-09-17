@@ -1,0 +1,134 @@
+{
+  "_comment": "Golden/regression cases for scripts/extract_lifedates.py, per docs/pipeline-strategy.md strategy #8 (sibling of golden_entries.json and golden_xrefs.json). Cases identify their entry by (volume, headword_clean), never by id, for the same reason as golden_xrefs.json. `expect` is either the four date fields or null, meaning the pass must leave the entry undated. Every case was verified against the printed head of the entry as extracted into structured-data/lexikon.db. Run scripts/check_golden_lifedates.py after any change to extract_lifedates.py.",
+  "cases": [
+    {
+      "name": "the plain formula: 'Marburg a. d. Lahn 11. Febr. 1900, †Heidelberg 13. März 2002' -- day numbers before the month are not years, and 'a. d.' is not a sentence end",
+      "volume": "Bd03_G-Inn",
+      "headword": "Gadamer",
+      "expect": {"birth_year": 1900, "birth_bc": 0, "death_year": 2002, "death_bc": 0}
+    },
+    {
+      "name": "BC on both sides with the one-year slash form: 'Athen (oder Ägina) 428/427 v. Chr., †Athen 348/347 v. Chr.' -> 428, 348",
+      "volume": "Bd06_O-Ra",
+      "headword": "Platon",
+      "expect": {"birth_year": 428, "birth_bc": 1, "death_year": 348, "death_bc": 1}
+    },
+    {
+      "name": "'ca.' before both years is harmless: 'Milet ca. 625 v. Chr., †ca. 547 v. Chr.'",
+      "volume": "Bd08_Th-Z",
+      "headword": "Thales",
+      "expect": {"birth_year": 625, "birth_bc": 1, "death_year": 547, "death_bc": 1}
+    },
+    {
+      "name": "the marker printed once, on the death, entails a BC birth: 'Milet um 560, †ebendort um 480 v. Chr.'",
+      "volume": "Bd03_G-Inn",
+      "headword": "Hekataios von Milet",
+      "expect": {"birth_year": 560, "birth_bc": 1, "death_year": 480, "death_bc": 1}
+    },
+    {
+      "name": "a BC birth with an unmarked death is read as BC only because 212 AD would be a 499-year life: 'Syrakus 287 v. Chr., †ebd. 212'",
+      "volume": "Bd01_A-B",
+      "headword": "Archimedes",
+      "expect": {"birth_year": 287, "birth_bc": 1, "death_year": 212, "death_bc": 1}
+    },
+    {
+      "name": "a life spanning the era boundary is NOT forced to BC: 'um 75 v. Chr., † um 18 n. Chr.' -- 'n. Chr.' lets a two-digit number be a year",
+      "volume": "Bd08_Th-Z",
+      "headword": "Xenarchos",
+      "expect": {"birth_year": 75, "birth_bc": 1, "death_year": 18, "death_bc": 0}
+    },
+    {
+      "name": "no era marker at all is not read: '384 in Stagira ... †322' -- the automatic pass refuses it and MANUAL_LIFEDATES restates the editors' reading",
+      "volume": "Bd01_A-B",
+      "headword": "Aristoteles",
+      "expect": {"birth_year": 384, "birth_bc": 1, "death_year": 322, "death_bc": 1}
+    },
+    {
+      "name": "a one-year 'oder' alternative is accepted like the slash form: '1265 oder 1266, †Köln 8. Nov. 1308'",
+      "volume": "Bd02_C-F",
+      "headword": "Duns Scotus",
+      "expect": {"birth_year": 1265, "birth_bc": 0, "death_year": 1308, "death_bc": 0}
+    },
+    {
+      "name": "a long place of death does not lose the year: '†Neumark, Siebenbürgen (= Maros-Vásárhely, heute rumän. Tıˆrgu-Mures¸) 27. Jan. 1860'",
+      "volume": "Bd01_A-B",
+      "headword": "Bolyai",
+      "expect": {"birth_year": 1802, "birth_bc": 0, "death_year": 1860, "death_bc": 0}
+    },
+    {
+      "name": "a year before a full stop is a year, not a day ordinal: '†Göttingen 9. Okt. 1950. Einer deutschen Familie ...'",
+      "volume": "Bd03_G-Inn",
+      "headword": "Hartmann",
+      "headword_startswith_body": "Hartmann, Nicolai",
+      "expect": {"birth_year": 1882, "birth_bc": 0, "death_year": 1950, "death_bc": 0}
+    },
+    {
+      "name": "a number cut by the window edge must not become a year: '†bei Shabero, Bezirk Ochwat, Rußland (gefallen) 10. Sept. 1941' once read as 194",
+      "volume": "Bd04_Ins-Loc",
+      "headword": "Lipps",
+      "headword_startswith_body": "Lipps, Johann Heinrich",
+      "expect": {"birth_year": 1889, "birth_bc": 0, "death_year": 1941, "death_bc": 0}
+    },
+    {
+      "name": "the formula is the test, not entry_type: Sokrates is a subject_article (no Werke: block) and Kant is unknown (bespoke bibliography)",
+      "volume": "Bd07_Re-Te",
+      "headword": "Sokrates",
+      "expect": {"birth_year": 470, "birth_bc": 1, "death_year": 399, "death_bc": 1}
+    },
+    {
+      "name": "Kant, entry_type unknown, is dated from the formula",
+      "volume": "Bd04_Ins-Loc",
+      "headword": "Kant",
+      "expect": {"birth_year": 1724, "birth_bc": 0, "death_year": 1804, "death_bc": 0}
+    },
+    {
+      "name": "OMIT a range: 'um 1214 oder 1219' is five years wide",
+      "volume": "Bd01_A-B",
+      "headword": "Bacon",
+      "headword_startswith_body": "Bacon, Roger",
+      "expect": null
+    },
+    {
+      "name": "OMIT a range: 'um 1280/1285, †München zwischen 1347 und 1349'",
+      "volume": "Bd06_O-Ra",
+      "headword": "Ockham",
+      "expect": null
+    },
+    {
+      "name": "OMIT when there is no dagger: Bourbaki is a collective, not a person",
+      "volume": "Bd01_A-B",
+      "headword": "Bourbaki",
+      "expect": null
+    },
+    {
+      "name": "OMIT a dagger inside parentheses: 'Manichäismus, von dem Perser Mani (... 216, †... 276) gegründete Offenbarungsreligion' is an article about a religion",
+      "volume": "Bd05_Log-N",
+      "headword": "Manichäismus",
+      "expect": null
+    },
+    {
+      "name": "OMIT prose: Antipatros's head is a paragraph ('... Leitung der Stoa. A. hatte viele Schüler ...') whose dagger belongs to Karneades",
+      "volume": "Bd01_A-B",
+      "headword": "Antipatros",
+      "expect": null
+    },
+    {
+      "name": "OMIT a two-digit death year without era marker: Cicero's '106, †... 43' is only dated through MANUAL_LIFEDATES",
+      "volume": "Bd02_C-F",
+      "headword": "Cicero",
+      "expect": {"birth_year": 106, "birth_bc": 1, "death_year": 43, "death_bc": 1}
+    }
+  ],
+  "aggregate_checks": [
+    {
+      "name": "coverage of biographies stays high -- 83.4% at the time of writing; a drop means the formula parser regressed, a jump means it started guessing",
+      "entry_type": "biography",
+      "min_share": 0.80,
+      "max_share": 0.90
+    },
+    {
+      "name": "no dated entry has an impossible life: birth before death, span at most 120 years",
+      "invariant": "plausible_lifespans"
+    }
+  ]
+}

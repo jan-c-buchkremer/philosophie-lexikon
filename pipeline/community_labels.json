@@ -1,0 +1,22 @@
+{
+  "_comment": "Hand-written names for the Leiden communities shown in viz/geschichte.html. Keyed by community id (a rank by size), so each entry also records the anchor headword it was written for; build_story.py warns and check_story.py fails when a rebuilt atlas has moved a number to a different community. Written from the ten most-cited members of each community. Never generated, never overwritten.",
+  "0":  {"anchor": "Mengenlehre",            "label": "Mengenlehre & Grundlagen der Mathematik"},
+  "1":  {"anchor": "Aussage",                "label": "Formale Logik"},
+  "2":  {"anchor": "Quantentheorie",         "label": "Physik & Kosmologie"},
+  "3":  {"anchor": "Ethik",                  "label": "Ethik & praktische Philosophie"},
+  "4":  {"anchor": "Stoa",                   "label": "Antike Schulen & Platonismus"},
+  "5":  {"anchor": "Phänomenologie",         "label": "Phänomenologie & Konstruktivismus"},
+  "6":  {"anchor": "Scholastik",             "label": "Scholastik & Metaphysik"},
+  "7":  {"anchor": "Wissenschaftstheorie",   "label": "Wissenschaftstheorie & logischer Empirismus"},
+  "8":  {"anchor": "Aufklärung",             "label": "Aufklärung & Religionsphilosophie"},
+  "9":  {"anchor": "Empirismus",             "label": "Erkenntnistheorie & Kant"},
+  "10": {"anchor": "Philosophie, indische",  "label": "Indische & ostasiatische Philosophie"},
+  "11": {"anchor": "Prädikator",             "label": "Prädikation & Handlung"},
+  "12": {"anchor": "Semantik",               "label": "Sprachphilosophie & Semantik"},
+  "13": {"anchor": "Syllogistik",            "label": "Traditionelle Logik & Syllogistik"},
+  "14": {"anchor": "Dialektik",              "label": "Dialektik, Subjekt & Marxismus"},
+  "15": {"anchor": "Naturphilosophie",       "label": "Naturphilosophie & Evolution"},
+  "16": {"anchor": "philosophy of mind",     "label": "Philosophie des Geistes"},
+  "17": {"anchor": "ars",                    "label": "Methode, Heuristik & Leibniz"},
+  "18": {"anchor": "extensional/Extension",  "label": "Intension, Modalität & mögliche Welten"}
+}

@@ -108,6 +108,15 @@ async function boot() {
     `${graph.edges.source.length.toLocaleString('de-DE')} Verweise · ` +
     `${graph.communities.length} Felder`;
   els.loading.hidden = true;
+
+  // A link from outside (the essay page) can open one entry directly.
+  // Read once at load; the map never writes the URL back.
+  const wanted = new URLSearchParams(location.search).get('entry');
+  const wantedNode = wanted === null ? undefined : graph.index.get(wanted);
+  if (wantedNode !== undefined) {
+    atlas.select(wantedNode);
+    atlas.flyTo(wantedNode);
+  }
 }
 
 /** Tell the map which parts of the canvas the interface is covering.

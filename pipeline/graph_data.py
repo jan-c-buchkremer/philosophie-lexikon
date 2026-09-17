@@ -86,11 +86,16 @@ def load_edges(conn: sqlite3.Connection, node_ids: set[str]) -> list[tuple[str, 
     articles are bound.
     """
     placeholders = ",".join("?" * len(Config.EDGE_STATUSES))
+    # ORDER BY is load-bearing: Leiden's result depends on the order the
+    # edges were added in, and without it the order is whatever query plan
+    # SQLite picks -- which changed when other scripts added indexes and
+    # columns, and silently changed the partition under the same seed.
     rows = conn.execute(f"""
         SELECT entry_id, resolved_entry_id
         FROM resolved_cross_references
         WHERE resolved_entry_id IS NOT NULL
           AND status IN ({placeholders})
+        ORDER BY entry_id, ordinal
     """, Config.EDGE_STATUSES).fetchall()
 
     weights: dict[tuple[str, str], int] = defaultdict(int)
@@ -573,7 +578,7 @@ def copy_frontend(src: Path, dest: Path):
     same spirit as export_dataset.py: the artifact stands alone.
     """
     dest.mkdir(parents=True, exist_ok=True)
-    for item in ("index.html", "style.css", "js"):
+    for item in ("index.html", "geschichte.html", "style.css", "js", "img"):
         s = src / item
         d = dest / item
         if not s.exists():
