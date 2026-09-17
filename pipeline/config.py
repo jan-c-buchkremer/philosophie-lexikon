@@ -98,3 +98,11 @@ class Config:
     SEED = _int("ATLAS_SEED", 20260908)
 
     SCHEMA_VERSION = "1.0"
+
+    # --- essay page (scripts/build_story.py) ---
+    # Hand-written community names, keyed by community id and checked
+    # against the anchor headword they were written for.
+    COMMUNITY_LABELS = ROOT / "pipeline" / "community_labels.json"
+    STORY_HUB_TOP_N = _int("STORY_HUB_TOP_N", 30)
+    STORY_AMBIGUITY_TOP_N = _int("STORY_AMBIGUITY_TOP_N", 30)
+    STORY_ALIAS_TOP_N = _int("STORY_ALIAS_TOP_N", 12)

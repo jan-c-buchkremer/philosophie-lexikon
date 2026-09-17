@@ -64,7 +64,10 @@ def page_markup() -> str:
     """
     html = (VIZ / "index.html").read_text(encoding="utf-8")
     body = html.split("<body>", 1)[1].split("</body>", 1)[0]
-    return re.sub(r"\s*<script\b.*?</script>", "", body, flags=re.DOTALL).strip()
+    body = re.sub(r"\s*<script\b.*?</script>", "", body, flags=re.DOTALL)
+    # The essay is a sibling page; a single file has no siblings.
+    body = re.sub(r"\s*<a class=\"story-link\".*?</a>", "", body, flags=re.DOTALL)
+    return body.strip()
 
 
 def build_entries():

@@ -68,8 +68,10 @@ scripts/clean_text.py         *_entries.jsonl         -> structured-data/*_entri
 scripts/build_db.py           *_entries_clean.jsonl   -> structured-data/lexikon.db
 scripts/build_lemma_index.py  lexikon.db              -> lemmas table
 scripts/resolve_xrefs.py      lexikon.db              -> resolved_* tables          (run last, see below)
+scripts/extract_lifedates.py  lexikon.db              -> birth/death columns        (after build_db.py, before export)
 scripts/export_dataset.py     lexikon.db              -> export/
 scripts/build_atlas.py        lexikon.db              -> export/viz/                (or viz/data/ with --dev)
+scripts/build_story.py        lexikon.db + graph.json -> export/viz/data/story.json (same --dev flag as build_atlas)
 scripts/build_artifact.py     viz/data/               -> export/atlas.html          (needs a --dev build first)
 ```
 
@@ -93,7 +95,21 @@ uv run python scripts/check_golden.py        # entry parser, against tests/golde
 uv run python scripts/check_golden_xrefs.py  # cross-reference resolver, against tests/golden_xrefs.json
 uv run python scripts/check_dataset.py       # export/ invariants
 uv run python scripts/check_viz.py           # atlas data invariants
+uv run python scripts/check_golden_lifedates.py  # birth/death extraction, against tests/golden_lifedates.json
+uv run python scripts/check_story.py         # story.json, every figure recomputed independently
 ```
+
+## The essay
+
+`viz/geschichte.html` ("Das unabsichtliche Selbstporträt") is a German
+long-form piece built on the same graph, linked from the top of the atlas:
+five chapters and a postscript, each around one chart -- the most-cited
+entries (no person among them), the communities as a chord diagram and a
+volume-by-community table, hubs against bridges, every dated life as a
+stratigraphy of the communities, and the references the resolver refused
+to decide. All figures in the text come from `story.json`
+(`scripts/build_story.py`), never from the HTML; the community names are
+the one hand-written input (`pipeline/community_labels.json`).
 
 ## The atlas
 
