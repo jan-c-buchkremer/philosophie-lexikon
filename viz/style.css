@@ -601,11 +601,15 @@ a.xref:hover { border-bottom-color: var(--accent); }
  * are left alone.
  * ========================================================================= */
 
+/* The map's `html, body { overflow: hidden }` must be lifted on BOTH
+   elements: with it left on html, the wheel does nothing while
+   scrollIntoView() still works, which is how the bug hid in testing. */
+html.story,
 body.story {
   overflow: auto;
   height: auto;
-  font-family: var(--serif);
 }
+body.story { font-family: var(--serif); }
 body.story .loading { z-index: 5; }
 
 .story-progress {
