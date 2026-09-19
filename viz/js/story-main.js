@@ -4,6 +4,7 @@
  *
  * Every number in the text comes from here, never from the HTML: a
  * <span data-fill="key"> is replaced by values[key]. The prose is written
+ * in geschichte.md, where {key} becomes that span (build_story_html.py),
  * around the numbers, so a rebuilt corpus changes the figures but not the
  * sentences -- and if a claim stops being true the caption says so
  * (see the "claim" entries below).

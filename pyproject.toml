@@ -23,6 +23,9 @@ dependencies = [
     "leidenalg>=0.10",
     "python-dotenv>=1.0",
     "fonttools>=4.64.0",
+    # --- essay page (scripts/build_story_html.py) ---
+    # Renders viz/geschichte.md into viz/geschichte.html.
+    "markdown-it-py>=3.0",
 ]
 
 [tool.uv]
