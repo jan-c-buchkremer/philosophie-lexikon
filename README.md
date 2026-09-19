@@ -72,6 +72,7 @@ scripts/extract_lifedates.py  lexikon.db              -> birth/death columns    
 scripts/export_dataset.py     lexikon.db              -> export/
 scripts/build_atlas.py        lexikon.db              -> export/viz/                (or viz/data/ with --dev)
 scripts/build_story.py        lexikon.db + graph.json -> export/viz/data/story.json (same --dev flag as build_atlas)
+scripts/build_story_html.py   viz/geschichte.md       -> viz/geschichte.html         (the essay prose; no data needed)
 scripts/build_artifact.py     viz/data/               -> export/atlas.html          (needs a --dev build first)
 ```
 
@@ -110,6 +111,13 @@ stratigraphy of the communities, and the references the resolver refused
 to decide. All figures in the text come from `story.json`
 (`scripts/build_story.py`), never from the HTML; the community names are
 the one hand-written input (`pipeline/community_labels.json`).
+
+The prose is written in `viz/geschichte.md` and rendered to
+`viz/geschichte.html` by `scripts/build_story_html.py`; edit the Markdown,
+not the HTML. `{key}` in the Markdown marks a number or name filled in at
+load time (the keys are defined in `viz/js/story-main.js`); the few other
+conventions -- `## Kicker · Title` for chapters, `> ` for asides, `::: fig`
+blocks for charts -- are documented at the top of the Markdown file.
 
 ## The atlas
 

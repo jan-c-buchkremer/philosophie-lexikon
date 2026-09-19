@@ -1,10 +1,11 @@
 <!doctype html>
+<!-- GENERATED from viz/geschichte.md by scripts/build_story_html.py. Edit the Markdown. -->
 <html lang="de" class="story" style="overflow: auto; height: auto;">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Das unabsichtliche Selbstporträt – Ein Essay zur Enzyklopädie Philosophie und Wissenschaftstheorie</title>
-  <meta name="description" content="Was 59.942 Querverweise der Enzyklopädie Philosophie und Wissenschaftstheorie über die Philosophie verraten: Schulen, Epochen und ungelöste Begriffsstreite, gelesen aus dem Zitationsgraphen.">
+  <title>Analyse und Visualisierung des Atlas der Enzyklopädie Philosophie und Wissenschaftstheorie</title>
+  <meta name="description" content="Was 59.942 Querverweise der Enzyklopädie Philosophie und Wissenschaftstheorie über die Philosophie verraten.">
   <link rel="stylesheet" href="style.css?v=2">
 </head>
 <!-- The map's stylesheet fixes html and body at 100% with overflow hidden.
@@ -29,143 +30,131 @@
       <h1>Das unabsichtliche Selbstporträt</h1>
       <p class="lede">Was <span data-fill="references">…</span> Querverweise über die Philosophie verraten – und was sie über sich selbst verschweigen.</p>
       <div class="stats">
-        <div class="stat"><b data-fill="entries">…</b><span>Einträge in <span data-fill="volumes">8</span> Bänden</span></div>
-        <div class="stat"><b data-fill="references">…</b><span>Querverweise</span></div>
-        <div class="stat"><b data-fill="resolvedPct">…</b><span>davon eindeutig aufgelöst</span></div>
-        <div class="stat"><b data-fill="communities">…</b><span>Regionen im Graphen</span></div>
+        <div class="stat"><b><span data-fill="entries">…</span></b><span>Einträge in <span data-fill="volumes">…</span> Bänden</span></div>
+        <div class="stat"><b><span data-fill="references">…</span></b><span>Querverweise</span></div>
+        <div class="stat"><b><span data-fill="resolvedPct">…</span></b><span>davon eindeutig aufgelöst</span></div>
+        <div class="stat"><b><span data-fill="communities">…</span></b><span>Regionen im Graphen</span></div>
       </div>
     </section>
 
     <section class="chapter prologue">
-      <p>Die <em>Enzyklopädie Philosophie und Wissenschaftstheorie</em>, herausgegeben von Jürgen Mittelstraß, ist acht Bände stark, alphabetisch geordnet und – wie jedes Nachschlagewerk – dafür gebaut, dass man sie nicht von vorn bis hinten liest. Man schlägt ein Wort auf, folgt einem Pfeil zum nächsten Wort, und irgendwann klappt man das Buch zu. Die Pfeile, im Druck ein kleines <span class="arrow">↑</span> vor dem Stichwort, sind der Gegenstand dieses Textes. Es gibt <span data-fill="references">…</span> davon.</p>
-      <p>Jeder dieser Pfeile ist eine redaktionelle Entscheidung: <em>Hier</em>, sagt er, <em>gehört ein anderer Artikel dazu.</em> Niemand hat diese Entscheidungen als Ganzes geplant. Sie wurden über Jahrzehnte von Dutzenden Autorinnen und Autoren getroffen, Artikel für Artikel, ohne Blick auf ein Gesamtbild. Legt man sie übereinander, entsteht trotzdem eines: ein Graph mit <span data-fill="nodes">…</span> Knoten und <span data-fill="edges">…</span> gerichteten Kanten, in dem jeder Artikel ein Punkt ist und jeder Pfeil eine Linie. Der <a href="index.html">Atlas</a> zeigt diesen Graphen als Karte. Dieser Text fragt, was die Karte erzählt.</p>
-      <p>Die These vorweg: <strong>Der Zitationsgraph ist ein unabsichtliches Selbstporträt der Disziplin.</strong> Er wurde nicht als Landkarte der Philosophiegeschichte entworfen, aber er enthält eine – samt Schulen, Epochengrenzen und den Stellen, an denen sich das Fach bis heute nicht auf einen Begriff einigen kann. Fünf Befunde, und ein Nachtrag zur Methode.</p>
+
+      <p>Die <em>Enzyklopädie Philosophie und Wissenschaftstheorie</em>, herausgegeben von Jürgen Mittelstraß, besteht aus acht alphabetisch geordneten Bänden. Durch die Verweise der Einträge ergibt sich ein Netzwerk aus Pfaden und Verbindungen durch den gesamten Textkorpus. Die Pfeile, im Druck ein kleines <span class="arrow">↑</span> vor dem Stichwort, sind der Gegenstand dieses Textes. Es gibt <span data-fill="references">…</span> davon.</p>
+      <p>Jeder dieser Pfeile ist eine redaktionelle Entscheidung: <em>Hier</em>, sagt er, <em>gehört ein anderer Artikel dazu.</em> Niemand hat diese Entscheidungen als Ganzes geplant. Sie wurden über Jahrzehnte von Dutzenden Autorinnen und Autoren getroffen, Artikel für Artikel, ohne Blick auf ein Gesamtbild. Legt man sie übereinander, entsteht ein Graph mit <span data-fill="nodes">…</span> Knoten und <span data-fill="edges">…</span> gerichteten Kanten, in dem jeder Artikel ein Punkt ist und jeder Pfeil eine Linie. Der <a href="index.html">Atlas</a> zeigt diesen Graphen als Karte.</p>
+      <p>So konstruiert sich aus den Daten eine Landkarte der Philosophiegeschichte, samt Schulen, Epochengrenzen und den Stellen, an denen sich das Fach bis heute nicht auf einen Begriff einigen kann. Genauere Beobachtung zeigt</p>
+
     </section>
 
     <!-- ============================================================ -->
+
     <section class="chapter" id="kapitel-1">
       <p class="kicker">Kapitel 1</p>
-      <h2>Begriffe, nicht Menschen</h2>
-      <p>Wer wird am häufigsten zitiert? Die Antwort ist eindeutig und ein wenig überraschend: niemand. Unter den <span data-fill="hubN">…</span> meistzitierten Einträgen finden sich Personen – <span data-fill="personsInTop">…</span>. An der Spitze steht <em data-fill="topHub">…</em> mit <span data-fill="topHubDeg">…</span> eingehenden Verweisen, dann <em data-fill="hub2">…</em> (<span data-fill="hub2Deg">…</span>) und <em data-fill="hub3">…</em> (<span data-fill="hub3Deg">…</span>). Die meistzitierte Person ist <em data-fill="topPerson">…</em> mit <span data-fill="topPersonDeg">…</span> Verweisen; die <em>Pythagoreer</em> – eine Schule, kein Mensch – kommen auf <span data-fill="degPythagoreer">…</span>. Kant steht bei <span data-fill="degKant">…</span>, Aristoteles bei <span data-fill="degAristoteles">…</span>, Popper bei <span data-fill="degPopper">…</span>, Kripke bei <span data-fill="degKripke">…</span>.</p>
+      <h2>Zitationshäufigkeit</h2>
+
+      <p>Wer wird am häufigsten zitiert? Am meisten verweisen die Einträge auf Begriffe. Unter den <span data-fill="hubN">…</span> meistzitierten Einträgen finden sich keine Personen. An der Spitze steht <em><span data-fill="topHub">…</span></em> mit <span data-fill="topHubDeg">…</span> eingehenden Verweisen, dann <em><span data-fill="hub2">…</span></em> (<span data-fill="hub2Deg">…</span>) und <em><span data-fill="hub3">…</span></em> (<span data-fill="hub3Deg">…</span>). Die meistzitierte Person ist <em><span data-fill="topPerson">…</span></em> mit <span data-fill="topPersonDeg">…</span> Verweisen; die <em>Pythagoreer</em>, eine Schule, kein Mensch, kommen auf <span data-fill="degPythagoreer">…</span>.</p>
 
       <figure class="fig">
         <div id="fig-hubs" class="fig-body"></div>
         <figcaption>Eingehende Verweise. Links das Ende der Rangliste, das <span data-fill="lastHubDeg">…</span> Verweise braucht; rechts die Personen auf derselben Skala. Der Punkt vor dem Namen zeigt die Region (Kapitel 2). Klick öffnet den Eintrag im Atlas.</figcaption>
       </figure>
 
-      <p>Das ist zunächst eine Eigenschaft der Gattung. Ein Sachlexikon verweist auf Sachen; die Biographien sind Beiwerk, kurze Einträge, die klären, wer gemeint ist, wenn im Artikel über Kausalität ein Name fällt. Aber der Befund geht tiefer, denn die Autoren hätten anders verweisen können – auf den Denker statt auf den Begriff, den er geprägt hat – und tun es fast nie. Die Enzyklopädie behandelt Ideen, als gehörten sie niemandem.</p>
-      <p>Karl Popper hat dafür ein Bild: die <em>dritte Welt</em>. Neben der physischen Welt (Welt 1) und der Welt der Bewusstseinszustände (Welt 2) gibt es für ihn eine Welt der objektiven Gedankeninhalte – Theorien, Probleme, Argumente –, die existieren, sobald sie formuliert sind, unabhängig davon, ob jemand sie gerade denkt. Der Graph verhält sich, als wäre diese These in ihn eingebaut. Er ist eine Karte von Welt 3: Begriffe verweisen auf Begriffe, und die Menschen, die sie hervorgebracht haben, stehen am Rand. Foucault hätte dieselbe Beobachtung anders gelesen – als Beleg dafür, dass „der Autor“ eine nachträgliche Ordnungsfunktion ist, die ein Diskurs nicht braucht, um zusammenzuhalten. Beide Lesarten passen. Bemerkenswert ist, dass ein alphabetisch sortiertes Buch sie überhaupt hergibt.</p>
+      <p>Das ist zunächst eine Eigenschaft der Gattung. Ein Sachlexikon verweist auf Sachen; die Biographien sind Beiwerk, kurze Einträge, die klären, wer gemeint ist, wenn im Artikel über Kausalität ein Name fällt. Die Autoren hätten anders verweisen können, auf den Denker statt auf den Begriff, den er geprägt hat, und tun es fast nie. Die Enzyklopädie behandelt Ideen also entkoppelt von den Personen, die sie hervorgebracht, geprägt und weiterentwickelt haben.</p>
       <p class="aside">Am anderen Ende der Skala: <span data-fill="uncited">…</span> Einträge (<span data-fill="uncitedPct">…</span>) werden von keinem anderen Artikel je zitiert – und <span data-fill="uncitedPersonsPct">…</span> davon sind Personen. Der mittlere Eintrag hat <span data-fill="median">…</span> eingehende Verweise. Es ist ein Graph mit sehr wenigen Zentren und einer sehr breiten Peripherie.</p>
+
     </section>
 
     <!-- ============================================================ -->
+
     <section class="chapter" id="kapitel-2">
       <p class="kicker">Kapitel 2</p>
-      <h2>Die Landkarte der Schulen</h2>
-      <p>Die Bände sind alphabetisch geordnet. Das ist ein <em>ordo cognoscendi</em>: die Reihenfolge, in der man etwas findet, nicht die, in der es zusammengehört. Die zweite Ordnung – <em>ordo essendi</em>, wenn man das scholastische Wort nicht scheut – steckt in den Pfeilen. Ein Algorithmus hat sie freigelegt. Er sucht Gruppen von Artikeln, die einander häufiger zitieren als den Rest, und findet <span data-fill="communities">…</span> solcher Regionen, von der größten (<em data-fill="largestComm">…</em>, <span data-fill="largestSize">…</span> Einträge) bis zur kleinsten (<em data-fill="smallestComm">…</em>, <span data-fill="smallestSize">…</span>). Die Namen der Regionen sind von Hand vergeben. Ihre Mitglieder hat niemand ausgesucht.</p>
+      <h2>Strukturen und Zentren</h2>
+
+      <p>Die Bände sind alphabetisch geordnet. Das hilft, um Artikel zu finden, schafft aber keine relevanten Zusammenhänge zwischen den Einträgen. Die zweite Ordnung steckt in der Struktur des Graphen. Mithilfe eines Betweenness-Algorithmus aus der Graphentheorie lässt sich der Atlas in Gruppen von Artikeln ordnen, die einander häufiger zitieren als den Rest. Er findet <span data-fill="communities">…</span> solcher Regionen, von der größten (<em><span data-fill="largestComm">…</span></em>, <span data-fill="largestSize">…</span> Einträge) bis zur kleinsten (<em><span data-fill="smallestComm">…</span></em>, <span data-fill="smallestSize">…</span>). Die Namen der Regionen sind durch die populärsten Artikel bestimmt.</p>
 
       <figure class="fig fig-wide">
         <div id="fig-chord" class="fig-body"></div>
         <figcaption>Verweise zwischen den Regionen. Ein Band läuft von der zitierenden zur zitierten Region, die Spitze zeigt die Richtung; die Breite ist die Zahl der Verweise. Eine Region berühren, um nur ihre Bänder zu sehen. Verweise innerhalb einer Region – <span data-fill="internalPct">…</span> aller – sind weggelassen.</figcaption>
       </figure>
 
-      <p>Zwei Dinge fallen auf. Erstens ist die Karte innenlastig: <span data-fill="internalPct">…</span> aller Verweise bleiben in der eigenen Region. Formale Logik diskutiert mit formaler Logik. Zweitens sind die Beziehungen zwischen Regionen selten symmetrisch. Am einseitigsten: <em data-fill="flowFrom">…</em> zitiert <em data-fill="flowTo">…</em> <span data-fill="flowW">…</span>-mal, die Gegenrichtung kommt auf <span data-fill="flowBack">…</span> – ein Verhältnis von <span data-fill="flowRatio">…</span>. Wer das Werkzeug liefert, wird zitiert; wer es benutzt, zitiert.</p>
-      <p>Ist das nicht einfach das Alphabet? Könnte eine Region nur deshalb zusammenhängen, weil ihre Artikel im selben Band stehen und Autoren gern in die Nachbarschaft verweisen? Die Kreuztabelle beantwortet das. Jede Zeile ist ein Band, jede Spalte eine Region, jede Zelle der Anteil des Bandes, der in diese Region fällt.</p>
+      <p>Zwei Dinge fallen auf. Erstens ist die Karte innenlastig: <span data-fill="internalPct">…</span> aller Verweise bleiben in der eigenen Region. Formale Logik diskutiert mit formaler Logik. Zweitens sind die Beziehungen zwischen Regionen selten symmetrisch. Am einseitigsten: <em><span data-fill="flowFrom">…</span></em> zitiert <em><span data-fill="flowTo">…</span></em> <span data-fill="flowW">…</span>-mal, die Gegenrichtung kommt auf <span data-fill="flowBack">…</span>. Dabei muss jedoch beachtet werden, dass Zitationspfeile beidseitig entlang der Ideengeschichte verlaufen können: <em><span data-fill="flowFrom">…</span></em> entwickelte sich weit vor den Definitionsversuchen der Begriffe aus <em><span data-fill="flowTo">…</span></em>.</p>
+      <p>Könnte eine Region nur deshalb zusammenhängen, weil ihre Artikel im selben Band stehen und Autoren gern in die Nachbarschaft verweisen? Nein, wie eine Analyse des Zitierverhaltens zeigt. Jede Zeile ist ein Band, jede Spalte eine Region, jede Zelle der Anteil des Bandes, der in diese Region fällt.</p>
 
       <figure class="fig">
         <div id="fig-heatmap" class="fig-body"></div>
         <figcaption>Band gegen Region, als Anteil je Band. Heller ist mehr. Die Zeilen ähneln einander: keine Spalte gehört einem Band. Cramérs V = <span data-fill="cramersV">…</span> (χ² = <span data-fill="chi2">…</span>, <span data-fill="dof">…</span> Freiheitsgrade, n = <span data-fill="heatN">…</span>; <span data-fill="unassigned">…</span> Einträge außerhalb der zwanzig großen Regionen nicht gezählt).</figcaption>
       </figure>
 
-      <p>Cramérs V misst, wie stark zwei Einteilungen zusammenhängen: 0 bei Unabhängigkeit, 1, wenn die eine die andere vollständig bestimmt. Es liegt hier bei <span data-fill="cramersV">…</span>. Die Regionen sind nicht das Alphabet. Sie sind das, was übrig bleibt, wenn man das Alphabet abzieht.</p>
-      <p>Wittgenstein hätte für solche Regionen ein Wort gehabt: <em>Familienähnlichkeit</em>. Kein Artikel in <em>Ethik &amp; praktische Philosophie</em> teilt ein einziges Merkmal mit allen anderen; sie hängen zusammen wie die Mitglieder einer Familie, über ein Netz sich überkreuzender Ähnlichkeiten – hier: sich überkreuzender Verweise. Der Algorithmus definiert nichts. Er zählt, wer mit wem spricht.</p>
+      <p>Cramérs V misst, wie stark zwei Einteilungen zusammenhängen: 0 bei Unabhängigkeit, 1, wenn die eine die andere vollständig bestimmt. Es liegt hier bei <span data-fill="cramersV">…</span>. Die oberflächliche Ordnung nach Anfangsbuchstaben beeinflusst also nicht die Struktur, die aus den Verweisen hervorgeht.</p>
+
     </section>
 
     <!-- ============================================================ -->
+
     <section class="chapter" id="kapitel-3">
       <p class="kicker">Kapitel 3</p>
       <h2>Laute Zentren, leise Brücken</h2>
-      <p>„Wichtig“ ist in einem Netzwerk kein einfacher Begriff. Man kann zählen, wie oft ein Eintrag zitiert wird – das ist Wichtigkeit als <em>Prestige</em>. Man kann aber auch zählen, wie oft ein Eintrag auf dem kürzesten Weg zwischen zwei anderen liegt – Wichtigkeit als <em>Vermittlung</em>, in der Netzwerkanalyse <em>Betweenness</em> genannt. Die beiden Maße messen verschiedene Dinge, und das Diagramm zeigt, wie verschieden.</p>
+
+      <p>„Wichtig“ ist in einem Netzwerk kein einfacher Begriff. Man kann zählen, wie oft ein Eintrag zitiert wird; man kann aber auch zählen, wie oft ein Eintrag auf dem kürzesten Weg zwischen zwei anderen liegt. So misst man Wichtigkeit als <em>Vermittlung</em>, in der Netzwerkanalyse <em>Betweenness</em> genannt. Die beiden Maße messen verschiedene Dinge, und das Diagramm zeigt, wie verschieden. Auf der x-Achse sehen wir die absoluten Zitationen, auf der y-Achse den berechneten Betweenness-Centrality-Wert.</p>
 
       <figure class="fig fig-wide">
         <div id="fig-scatter" class="fig-body"></div>
-        <figcaption>Jeder Punkt ein Eintrag. Beide Achsen sind wurzelskaliert – dieselbe Stauchung, die im Atlas die Punktgröße bestimmt –, damit die Null einen Platz hat: ein Drittel der Einträge wird nie zitiert. Mit der Maus über die Punktwolke fahren, um Einträge zu lesen; Klick öffnet sie im Atlas.</figcaption>
+        <figcaption>Jeder Punkt ein Eintrag. Beide Achsen sind wurzelskaliert, ein Drittel der Einträge wird nie zitiert. Mit der Maus über die Punktwolke fahren, um Einträge zu lesen; Klick öffnet sie im Atlas.</figcaption>
       </figure>
 
-      <p>Die meisten Einträge liegen auf der Diagonalen: viel zitiert, viel dazwischen. Den höchsten Betweenness-Wert hat <em data-fill="btTop">…</em>, ein Eintrag, der nach Verweisen nur auf Rang <span data-fill="btTopDegRank">…</span> steht. Interessanter sind die Abweichler. <em>Rationalität</em> wird <span data-fill="ratDeg">…</span>-mal zitiert, Rang <span data-fill="ratDegRank">…</span> – und steht bei der Betweenness auf Rang <span data-fill="ratBtRank">…</span>. Das ist ein Begriff, den kaum jemand als Ziel ansteuert, an dem aber sehr viele Wege vorbeiführen: eine leise Brücke zwischen Phänomenologie, Ethik und Wissenschaftstheorie. Die Wissenschaftsforschung nennt so etwas ein <em>Grenzobjekt</em> – etwas, das in verschiedenen Gemeinschaften verschieden verstanden wird und gerade deshalb zwischen ihnen vermitteln kann.</p>
-      <p>Die auffälligste Brücke ist <em>Philosophie, buddhistische</em>: Rang <span data-fill="budBtRank">…</span> bei der Betweenness, Rang <span data-fill="budDegRank">…</span> bei den Verweisen. Hinter ihr liegt eine ganze Region, <em data-fill="asiaLabel">…</em> mit <span data-fill="asiaSize">…</span> Einträgen, und diese Region hat eine Eigenschaft, die man sich ansehen sollte. Ihre Artikel verweisen <span data-fill="asiaOut">…</span>-mal nach außen, in den Rest der Enzyklopädie. Der Rest der Enzyklopädie verweist <span data-fill="asiaIn">…</span>-mal zurück – ein Verhältnis von <span data-fill="asiaRatio">…</span>. Und von diesen <span data-fill="asiaIn">…</span> Rückverweisen landen <span data-fill="asiaTop3Pct">…</span> auf nur drei Überblicksartikeln (<span data-fill="asiaTop3">…</span>).</p>
-      <p>Man muss das nicht als Vorwurf lesen; es ist eine Beschreibung. Die Autorinnen und Autoren der Artikel über indisches und chinesisches Denken haben ihre Gegenstände in das westliche Vokabular eingebettet – sie verweisen auf <span class="arrow">↑</span>Logik, <span class="arrow">↑</span>Substanz, <span class="arrow">↑</span>Erkenntnistheorie. Die Autoren der Artikel über Logik, Substanz und Erkenntnistheorie haben den Weg zurück selten gefunden. Der Graph zeigt einen Kontinent, der zuhört und selten angesprochen wird. Was das über den Kanon sagt, den ein deutschsprachiges Nachschlagewerk des späten 20. Jahrhunderts abbildet, ist eine Frage, die der Graph stellt, nicht beantwortet.</p>
+      <p>Die meisten Einträge liegen auf der Diagonalen: es besteht eine eindeutige Korrelation. Den höchsten Betweenness-Wert hat <em><span data-fill="btTop">…</span></em>, ein Eintrag, der nach Verweisen nur auf Rang <span data-fill="btTopDegRank">…</span> steht. Interessanter sind die Abweichler. <em>Rationalität</em> wird <span data-fill="ratDeg">…</span>-mal zitiert, Rang <span data-fill="ratDegRank">…</span>, und steht bei der Betweenness auf Rang <span data-fill="ratBtRank">…</span>. Das ist ein Begriff, den kaum jemand als Ziel ansteuert, an dem aber sehr viele Wege vorbeiführen: ein Begriff aus den Feldern der Phänomenologie, Ethik und Wissenschaftstheorie. Die Wissenschaftsforschung nennt so etwas ein <em>Grenzobjekt</em>, das in verschiedenen Gemeinschaften verschieden verstanden wird und gerade deshalb zwischen ihnen vermitteln kann.</p>
+      <p>Die auffälligste Brücke ist <em>Philosophie, buddhistische</em>: Rang <span data-fill="budBtRank">…</span> bei der Betweenness, Rang <span data-fill="budDegRank">…</span> bei den Verweisen. Hinter ihr liegt eine ganze Region, <em><span data-fill="asiaLabel">…</span></em> mit <span data-fill="asiaSize">…</span> Einträgen. Ihre Artikel verweisen <span data-fill="asiaOut">…</span>-mal nach außen, in den Rest der Enzyklopädie. Der Rest der Enzyklopädie verweist jedoch nur <span data-fill="asiaIn">…</span>-mal zurück, von denen <span data-fill="asiaTop3Pct">…</span> auf nur drei Überblicksartikeln (<span data-fill="asiaTop3">…</span>) landen.</p>
+      <p>Die Autorinnen und Autoren der Artikel über indisches und chinesisches Denken haben ihre Gegenstände in das westliche Vokabular eingebettet, sie verweisen auf <span class="arrow">↑</span>Logik, <span class="arrow">↑</span>Substanz, <span class="arrow">↑</span>Erkenntnistheorie. Die Autoren der Artikel über Logik, Substanz und Erkenntnistheorie haben den Weg zurück selten gefunden. Der Graph zeigt also, wie die westliche Philosophie versucht, philosophische Konzepte aus anderen Kulturkreisen in ihren Systemen zu erklären.</p>
+
     </section>
 
     <!-- ============================================================ -->
+
     <section class="chapter" id="kapitel-4">
       <p class="kicker">Kapitel 4</p>
-      <h2>Eine Stratigraphie der Ideengeschichte</h2>
-      <p>In die Berechnung der Regionen ist kein einziges Datum eingegangen. Der Algorithmus kennt nur Pfeile. Trotzdem lässt sich fragen, ob die Regionen etwas mit Zeit zu tun haben – und dafür braucht man Jahreszahlen, die in den Biographien stehen: <em>„Kant, Immanuel, Königsberg 22. April 1724, †ebd. 12. Febr. 1804“</em>. Das Todeszeichen ist der Anker. Für <span data-fill="dated">…</span> Einträge ließen sich Geburts- und Sterbejahr auf diese Weise lesen: <span data-fill="datedBio">…</span> der <span data-fill="bioTotal">…</span> Biographien (<span data-fill="datedPct">…</span>), dazu <span data-fill="datedOther">…</span> Personen, die das Lexikon aus formalen Gründen nicht als Biographie führt – Sokrates zum Beispiel, der keine Werke hinterließ und deshalb keinen <em>Werke:</em>-Abschnitt hat. Wo der Text unsicher ist („um 1214 oder 1219“), wurde nichts geraten.</p>
+      <h2>Zeitachse der Ideengeschichte</h2>
+
+      <p>In die Berechnung der Regionen ist kein einziges Datum eingegangen. Der Algorithmus kennt nur die Verweise. Trotzdem lässt sich mithilfe der enthaltenen Jahreszahlen fragen, ob die Regionen etwas mit Zeit zu tun haben. Zum Beispiel: <em>„Kant, Immanuel, Königsberg 22. April 1724, †ebd. 12. Febr. 1804“</em>. Technisch lässt sich durch das Todeszeichen (Kreuz) diese Art von Daten finden. Für <span data-fill="dated">…</span> Einträge ließen sich Geburts- und Sterbejahr auf diese Weise lesen: <span data-fill="datedBio">…</span> der <span data-fill="bioTotal">…</span> Biographien (<span data-fill="datedPct">…</span>), dazu <span data-fill="datedOther">…</span> Personen, die das Lexikon aus formalen Gründen nicht als Biographie führt, wie zum Beispiel Sokrates, der keine Werke hinterließ und deshalb keinen <em>Werke:</em>-Abschnitt hat. Einträge, bei denen der Text unsicher ist („um 1214 oder 1219“), wurden außen vor gelassen. Damit lässt sich der Zusammenhang der Biographiedaten aus dem Text mit den Strukturdaten des Graphen darstellen.</p>
 
       <figure class="fig fig-wide">
         <div id="fig-strata" class="fig-body"></div>
-        <figcaption>Jede Zeile eine Region, jede Linie ein Leben von der Geburt bis zum Tod, sortiert nach dem Median des Geburtsjahrs. Die Zeitachse ist stückweise gedehnt – jede Epoche bekommt Platz nach ihrer Besetzung, die Jahreszahlen zeigen es. Die Regionen kommen aus den Verweisen, die Jahreszahlen aus den Biographien; verbunden wurden sie erst hier.</figcaption>
+        <figcaption>Jede Zeile eine Region im Atlas, jede Linie ein Leben von der Geburt bis zum Tod, sortiert nach dem Median des Geburtsjahrs. Hier ist die Zeitachse teilweise gedehnt, um die Lesbarkeit zu verbessern.</figcaption>
       </figure>
 
-      <p>Das Bild ist eine Treppe. Oben <em data-fill="firstRow">…</em> mit dem Median <span data-fill="firstMedian">…</span>, unten <em data-fill="lastRow">…</em> mit dem Median <span data-fill="lastMedian">…</span>. Dazwischen, in dieser Reihenfolge: Scholastik, Aufklärung, Physik, Naturphilosophie, Kant, Hegel, Wissenschaftstheorie, Mengenlehre. Es ist, bis auf Nuancen, die Reihenfolge, in der man Philosophiegeschichte lehrt. Niemand hat sie hineingelegt.</p>
-      <p>Von den Personen der Antike liegen <span data-fill="eraAntikeTopPct">…</span> in einer einzigen Region (<em data-fill="eraAntikeTop">…</em>); vom Mittelalter <span data-fill="eraMittelalterTopPct">…</span> in <em data-fill="eraMittelalterTop">…</em>; die Frühe Neuzeit hat ihren Schwerpunkt in <em data-fill="eraFruehTop">…</em>, das 20. Jahrhundert in <em data-fill="eraZwanzigTop">…</em>. Das 19. Jahrhundert ist die breiteste Schicht – <span data-fill="eraNeunzehn">…</span> Personen, <span data-fill="eraNeunzehnPct">…</span> aller datierten – und die am wenigsten konzentrierte: das Jahrhundert, in dem sich die Philosophie in Fächer teilte. Die Epoche eines Denkers lässt sich daran ablesen, wer ihn zitiert.</p>
-      <p>Hegel hat in der Vorrede zu den <em>Grundlinien der Philosophie des Rechts</em> geschrieben, Philosophie sei „ihre Zeit in Gedanken erfaßt“. Es ist eine der meistzitierten Formeln der Philosophiegeschichte, und sie war immer eine These, keine Messung. Hier ist sie eine Messung. Ein Graph, der von Zeit nichts weiß, sortiert die Denker nach ihrer Zeit, weil er sie nach ihren Begriffen sortiert – und die Begriffe haben ein Datum. Hegel selbst steht in der Region <em data-fill="hegelComm">…</em>, auf der Treppe, die seine These bestätigt. Michel Foucault nannte die Denkordnung einer Epoche ihre <em>Episteme</em>: das, was in einer Zeit sagbar ist, bevor jemand etwas Bestimmtes sagt. Man kann die Zeilen dieser Treppe als Epistemen lesen, die sich aus nichts als Verweisen ergeben.</p>
-      <p class="aside">Die längste Lebenslinie gehört <em data-fill="longestLife">…</em> (<span data-fill="longestYears">…</span>, <span data-fill="longestSpan">…</span> Jahre). Dazu mehr im Nachtrag.</p>
+      <p>Wir sehen eine Anordnung nach Epochen. Oben <em><span data-fill="firstRow">…</span></em> mit dem Median <span data-fill="firstMedian">…</span>, unten <em><span data-fill="lastRow">…</span></em> mit dem Median <span data-fill="lastMedian">…</span>. Dazwischen, in dieser Reihenfolge: Scholastik, Aufklärung, Physik, Naturphilosophie, Kant, Hegel, Wissenschaftstheorie, Mengenlehre. Es ist, bis auf Nuancen, die Reihenfolge, in der Philosophiegeschichte gelehrt wird, die aber nicht explizit in den Daten steht. Datenanalyse und Darstellung beleuchten diesen Zusammenhang.</p>
+      <p>Von den Personen der Antike liegen <span data-fill="eraAntikeTopPct">…</span> in einer einzigen Region (<em><span data-fill="eraAntikeTop">…</span></em>); vom Mittelalter <span data-fill="eraMittelalterTopPct">…</span> in <em><span data-fill="eraMittelalterTop">…</span></em>; die Frühe Neuzeit hat ihren Schwerpunkt in <em><span data-fill="eraFruehTop">…</span></em>, das 20. Jahrhundert in <em><span data-fill="eraZwanzigTop">…</span></em>. Das 19. Jahrhundert ist die breiteste Schicht – <span data-fill="eraNeunzehn">…</span> Personen, <span data-fill="eraNeunzehnPct">…</span> aller datierten – und die am wenigsten konzentrierte: das Jahrhundert, in dem sich die Philosophie in Fächer teilte. Wir sehen auch bedeutende Sekundärliteratur über bestimmte philosophische Schulen und deren Wiederaufleben, Jahrhunderte nach ihren Kernphasen.</p>
+      <p class="aside">Die längste Lebenslinie gehört <em><span data-fill="longestLife">…</span></em> (<span data-fill="longestYears">…</span>, <span data-fill="longestSpan">…</span> Jahre).</p>
+
     </section>
 
     <!-- ============================================================ -->
+
     <section class="chapter" id="kapitel-5">
       <p class="kicker">Kapitel 5</p>
-      <h2>Wörter, die sich selbst widersprechen dürfen</h2>
-      <p>Nicht jeder Pfeil führt irgendwohin. <span data-fill="unresolved">…</span> Verweise zeigen auf Artikel, die es nicht gibt. Und <span data-fill="ambiguous">…</span> Verweise (<span data-fill="ambiguousPct">…</span>) zeigen auf mehrere Artikel zugleich: Hinter <span class="arrow">↑</span>Implikation kann <em>Implikation</em>, <em>Implikation, strikte</em> oder <em>Implikation, relevante</em> stehen, und der Kontext sagt nicht, welche. Das Programm, das die Pfeile auflöst, hat für solche Fälle eine Regel: Es rät nicht. Es markiert den Verweis als mehrdeutig und legt die Kandidaten daneben.</p>
+      <h2>Uneindeutigkeit</h2>
+
+      <p>Nicht jeder Pfeil führt irgendwohin. <span data-fill="unresolved">…</span> Verweise zeigen auf Artikel, die es nicht gibt. Und <span data-fill="ambiguous">…</span> Verweise (<span data-fill="ambiguousPct">…</span>) zeigen auf mehrere Artikel zugleich: Hinter <span class="arrow">↑</span>Implikation kann <em>Implikation</em>, <em>Implikation, strikte</em> oder <em>Implikation, relevante</em> stehen, und der Kontext sagt nicht, welche. Algorithmisch werden solche Verweise als mehrdeutig markiert und alle Kandidaten gelistet. Hier stoßen wir auf eine technische Limitation: einer Expertin oder einem Experten würde der Kontext häufig reichen, um diese Ambiguität aufzulösen. Ein deterministischer Algorithmus kann das nicht.</p>
 
       <figure class="fig fig-wide">
         <div id="fig-ambiguity" class="fig-body"></div>
         <figcaption>Links die Begriffe, bei denen der Verweis offen bleibt; in der Mitte die Namen, die mehrere Menschen tragen; rechts die Umkehrung. Alle Links öffnen den Eintrag im Atlas.</figcaption>
       </figure>
 
-      <p>Der umstrittenste Begriff des Corpus ist <em data-fill="topTerm">…</em>: <span data-fill="topTermCount">…</span> Verweise, <span data-fill="topTermCands">…</span> mögliche Ziele (<span data-fill="topTermList">…</span>). Das ist kein Fehler der Enzyklopädie. Es ist ihr Gegenstand. Ob „wenn A, dann B“ eine materiale Implikation ist (falsch nur, wenn A wahr und B falsch ist), eine strikte (notwendigerweise so) oder eine relevante (A muss mit B etwas zu tun haben), ist seit C. I. Lewis’ Angriff auf die „Paradoxien der materialen Implikation“ von 1912 eine offene Frage der Logik. Der Graph enthält diese Offenheit als Struktur: Ein Wort, das in der Disziplin mehrere Bedeutungen hat, hat im Graphen mehrere Ziele.</p>
-      <p>Die zweite Liste ist die einfachere und in gewisser Weise die philosophischere. <span data-fill="homonyms">…</span> Namen werden von mehreren Menschen zugleich getragen, <span data-fill="homonymsTriple">…</span> davon dreifach: <span data-fill="homonymTripleNames">…</span>. Saul Kripke hat argumentiert, dass Eigennamen <em>starre Bezeichner</em> sind: Sie hängen an ihrem Träger nicht über eine Beschreibung, sondern über eine Kette von Weitergaben, die bei einer Taufe beginnt. Drei Ketten, die zufällig dasselbe Wort transportieren, sind drei Namen, nicht ein mehrdeutiger. Ein Lexikon, das diese Theorie an anderer Stelle selbst erklärt, ist zugleich ihr Beleg.</p>
-      <p>Die dritte Liste zeigt die Umkehrung: eine Sache, viele Namen. <em data-fill="aliasTop">…</em> ist unter <span data-fill="aliasTopCount">…</span> weiteren Stichwörtern erreichbar (<span data-fill="aliasTopList">…</span>) – die Enzyklopädie hat entschieden, dass diese Unterscheidungen sich einen Artikel teilen, nicht mehrere bekommen. Auch das ist eine philosophische Entscheidung, nur eine, die unsichtbar bleibt, solange man das Buch liest.</p>
-    </section>
+      <p>Der umstrittenste Begriff des Corpus ist <em><span data-fill="topTerm">…</span></em>: <span data-fill="topTermCount">…</span> Verweise, <span data-fill="topTermCands">…</span> mögliche Ziele (<span data-fill="topTermList">…</span>); der Begriff wird tatsächlich häufig unterschiedlich definiert. Der Graph enthält diese Offenheit als Struktur: Ein Wort, das in der Disziplin mehrere Bedeutungen hat, hat im Graphen mehrere Ziele.</p>
+      <p>Die zweite Liste behandelt Personennamen. <span data-fill="homonyms">…</span> Namen werden von mehreren Menschen zugleich getragen, <span data-fill="homonymsTriple">…</span> davon dreifach: <span data-fill="homonymTripleNames">…</span>.</p>
+      <p>Die dritte Liste zeigt die Begriffe mit den meisten Verweisnamen. <em><span data-fill="aliasTop">…</span></em> ist unter <span data-fill="aliasTopCount">…</span> weiteren Stichwörtern erreichbar (<span data-fill="aliasTopList">…</span>) – die Enzyklopädie hat entschieden, dass diese Unterscheidungen sich einen Artikel teilen, nicht mehrere bekommen.</p>
 
-    <!-- ============================================================ -->
-    <section class="chapter epilogue" id="nachtrag">
-      <p class="kicker">Nachtrag</p>
-      <h2>Wie man einen Text zum Sprechen bringt</h2>
-      <p>Zum Schluss ein Wort dazu, woher die Daten kommen, weil es in dieselbe Geschichte gehört. Die acht Bände liegen als PDF vor, und ein PDF weiß, welche Zeichen es enthält: Jede Schrift trägt eine Tabelle, die sagt, welcher Buchstabe hinter welchem Glyphen steht. Bei dieser Enzyklopädie logen die Tabellen. Die Schrift, die die logischen Symbole setzt, behauptete für das Zeichen →, es sei ein Ausrufezeichen; für ∈ eine Zwei; für ∃ eine Neun. Die Schrift für Griechisch nannte das α ein Æ. Nichts davon fiel auf, weil „Æ“ ein gültiger Buchstabe ist. Ein falsches Zeichen, das wie ein richtiges aussieht, ist die gefährlichste Art von Fehler: Es meldet sich nicht.</p>
-
-      <figure class="fig fig-wide specimen">
-        <div class="specimen-sheet">
-          <img src="img/Bd05_Log-N_AdvP4C4E74.png" alt="Glyphentafel der Formelschrift aus Band 5: gerenderte Glyphen, darunter Byte, Glyphname und Häufigkeit, darunter das rekonstruierte Zeichen" loading="lazy">
-        </div>
-        <figcaption>Band 5, die Formelschrift. Oben, was das PDF zeichnet; darunter, was die Schrift dazu behauptet – „21 exclam ×429“: Byte 21, Glyphname <em>Ausrufezeichen</em>, 429-mal im Band; ganz unten, was nach der Reparatur gelesen wird. Die Schrift ist Donald Knuths Computer Modern unter falschem Namen, mit den Glyphnummern aus TeX.</figcaption>
-      </figure>
-
-      <p>Die Lösung war Philologie. Man rendert jeden Glyphen, sieht ihn an und vergleicht ihn mit dem, was der Text an anderer Stelle unmissverständlich sagt – ein Stichwort, das als „abh�ngig“ erscheint, kommt hundertfach als „abhängig“ vor, und die Mehrheit entscheidet, mit Sicherheitsabstand. Das ist der hermeneutische Zirkel als Arbeitsanweisung: Das einzelne Zeichen wird aus dem Ganzen verstanden, das Ganze aus den Zeichen. Gadamer, der ihn beschrieben hat, ist im Corpus die Person mit der längsten Lebenslinie – ein Zufall, aber ein passender.</p>
-
-      <figure class="fig specimen">
-        <div class="specimen-sheet">
-          <img src="img/Bd01_A-B_AdvOLDGRI.png" alt="Glyphentafel der griechischen Schrift aus Band 1: gerenderte Glyphen und die rekonstruierten griechischen Buchstaben" loading="lazy">
-        </div>
-        <figcaption>Band 1, die griechische Schrift, soweit sie sich aus den Glyphnummern der Originalschrift rekonstruieren ließ. Die Zahlen sind Byte und Häufigkeit.</figcaption>
-      </figure>
-
-      <p>Eine Regel hat das Projekt durchgehalten: <strong>lieber eine sichtbare Lücke als ein überzeugendes falsches Zeichen.</strong> Wo eine Tabelle nicht belegt werden konnte, steht im Text ein Ersatzzeichen (�), und es wird gezählt. Das ist im Kern Poppers Fallibilismus – nicht als These über Wissenschaft, sondern als Bauvorschrift: Ein Ergebnis, das sich nicht als falsch erweisen könnte, ist keines. Die griechische Schrift ist noch nicht vollständig repariert; rund 8.800 Zeichen sind vermutlich falsch und dürfen es bleiben, bis jemand das Gegenteil belegt. Der Graph, den dieser Text beschreibt, ist so genau, wie diese Lücken es zulassen, und nicht genauer. Dasselbe gilt für den Text.</p>
     </section>
 
     <footer class="story-foot">
       <h3>Methode</h3>
       <ul>
-        <li>Knoten sind alle Einträge außer Weiterleitungen; Kanten sind die eindeutig aufgelösten Verweise. Regionen: Leiden-Algorithmus auf der ungerichteten Projektion, Auflösung 2,0. Beides ist der Graph, den auch der Atlas zeigt.</li>
-        <li>Betweenness: gerichtet, ungewichtet, über alle kürzesten Wege. Cramérs V aus der Kreuztabelle Band × Region ohne die Einträge außerhalb der zwanzig großen Regionen.</li>
-        <li>Lebensdaten: aus dem Kopf jedes Eintrags, verankert am Todeszeichen; Spannen und Alternativen von mehr als einem Jahr wurden ausgelassen. Zwei Einträge ohne jede Epochenangabe (Aristoteles, Cicero) sind von Hand nachgetragen.</li>
-        <li>Jede Zahl auf dieser Seite wird beim Bau der Daten berechnet und von einem unabhängigen Prüfskript nachgerechnet. Stand der Daten: <span data-fill="generated">…</span>.</li>
+      <li>Knoten sind alle Einträge außer Weiterleitungen; Kanten sind die eindeutig aufgelösten Verweise. Regionen: Leiden-Algorithmus auf der ungerichteten Projektion, Auflösung 2,0. Beides ist der Graph, den auch der Atlas zeigt.</li>
+      <li>Betweenness: gerichtet, ungewichtet, über alle kürzesten Wege. Cramérs V aus der Kreuztabelle Band × Region ohne die Einträge außerhalb der zwanzig großen Regionen.</li>
+      <li>Lebensdaten: aus dem Kopf jedes Eintrags, verankert am Todeszeichen; Spannen und Alternativen von mehr als einem Jahr wurden ausgelassen. Zwei Einträge ohne jede Epochenangabe (Aristoteles, Cicero) sind von Hand nachgetragen.</li>
+      <li>Jede Zahl auf dieser Seite wird beim Bau der Daten berechnet und von einem unabhängigen Prüfskript nachgerechnet. Stand der Daten: <span data-fill="generated">…</span>.</li>
       </ul>
       <p><a href="index.html">Zum Atlas</a> · <a href="https://github.com/jan-c-buchkremer/philosophie-lexikon">Quellcode und Daten</a></p>
     </footer>
-
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
