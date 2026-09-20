@@ -7,7 +7,7 @@
  * a volume, which is what Cramér's V near zero says in one number.
  */
 import { communityColor, communityLabel, fmt } from '../story-data.js';
-import { ACCENT_COOL, INK_EDGE, TEXT_FAINT, TEXT_SOFT, escapeHtml, mount, tip } from './chart-common.js';
+import { ACCENT_COOL, INK_EDGE, TEXT_FAINT, TEXT_SOFT, escapeHtml, labelLines, mount, stackLines, textWidth, tip } from './chart-common.js';
 
 export function renderVolumeHeatmap(container, graph, story) {
   const h = story.volume_community_heatmap;
@@ -17,8 +17,15 @@ export function renderVolumeHeatmap(container, graph, story) {
   const shares = h.counts.map((row, i) => row.map((v) => v / rowTotals[i]));
 
   const narrow = container.getBoundingClientRect().width < 640;
-  const margin = { top: narrow ? 120 : 132, right: 8, bottom: 8, left: 74 };
   const cell = narrow ? 16 : 24;
+  const fontSize = narrow ? 9 : 10;
+
+  // The column labels lean at 55 degrees from their dot; the header and
+  // the right margin must hold the longest one, so it is measured.
+  const lean = (55 * Math.PI) / 180;
+  const lines = ids.map((id) => labelLines(communityLabel(graph, id)));
+  const reach = textWidth(container, lines.flat(), fontSize) + 11;
+  const margin = { top: Math.ceil(reach * Math.sin(lean)) + 14, right: Math.ceil(reach * Math.cos(lean)) - 8, bottom: 8, left: 74 };
   const { g, inner } = mount(container, { height: volumes.length * cell + margin.top + margin.bottom, margin });
 
   const x = d3.scaleBand().domain(ids).range([0, inner.width]).paddingInner(0.12);
@@ -45,9 +52,9 @@ export function renderVolumeHeatmap(container, graph, story) {
   const cols = g.selectAll('g.col').data(ids).join('g').attr('class', 'col')
     .attr('transform', (d) => `translate(${x(d) + x.bandwidth() / 2},-6) rotate(-55)`);
   cols.append('circle').attr('cx', 4).attr('cy', 0).attr('r', 3).attr('fill', (d) => communityColor(graph, d));
-  cols.append('text').attr('x', 11).attr('dy', '0.35em')
-    .attr('fill', TEXT_FAINT).attr('font-family', 'var(--sans)').attr('font-size', narrow ? 9 : 10)
-    .text((d) => communityLabel(graph, d));
+  cols.append('text')
+    .attr('fill', TEXT_FAINT).attr('font-family', 'var(--sans)').attr('font-size', fontSize)
+    .each(function (d, i) { stackLines(d3.select(this), lines[i], 11); });
 
   g.append('rect').attr('x', -0.5).attr('y', -0.5).attr('width', inner.width + 1).attr('height', volumes.length * cell + 1)
     .attr('fill', 'none').attr('stroke', INK_EDGE);

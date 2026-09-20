@@ -109,3 +109,25 @@ export function interactive(selection, { html, href }) {
 export function shortLabel(s, max = 26) {
   return s.length > max ? `${s.slice(0, max - 1)}…` : s;
 }
+
+/** Break a long region name into two lines at the conjunction nearest its middle. */
+export function labelLines(label) {
+  if (label.length <= 24) return [label];
+  const cut = d3.least([...label.matchAll(/ & |, /g)], (m) => Math.abs(m.index - label.length / 2));
+  return cut ? [label.slice(0, cut.index + cut[0].length).trimEnd(), label.slice(cut.index + cut[0].length)] : [label];
+}
+
+/** Fill a <text> with `lines` as tspans, centred on the baseline the way a single line at dy 0.35em is. */
+export function stackLines(text, lines, x = 0) {
+  text.selectAll('tspan').data(lines).join('tspan')
+    .attr('x', x).attr('dy', (l, i) => (i === 0 ? `${0.35 - 0.55 * (lines.length - 1)}em` : '1.1em')).text((l) => l);
+}
+
+/** Widest of `strings` in the chart sans face at `fontSize`, measured in a throwaway svg. */
+export function textWidth(container, strings, fontSize) {
+  const svg = d3.select(container).append('svg');
+  const probe = svg.append('text').attr('font-family', 'var(--sans)').attr('font-size', fontSize);
+  const width = d3.max(strings, (str) => probe.text(str).node().getComputedTextLength()) || 0;
+  svg.remove();
+  return width;
+}
