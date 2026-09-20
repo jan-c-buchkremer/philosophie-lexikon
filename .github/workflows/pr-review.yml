@@ -1,0 +1,17 @@
+# Every pull request is reviewed by Claude via the reusable workflow in
+# jan-c-buchkremer/agentic-ci-cd, billed to the Claude subscription behind
+# the CLAUDE_CODE_OAUTH_TOKEN secret (Settings -> Secrets -> Actions).
+# Reviews arrive as one summary comment plus inline comments from claude[bot].
+name: PR Review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+jobs:
+  review:
+    uses: jan-c-buchkremer/agentic-ci-cd/.github/workflows/review-subscription.yml@main
+    secrets:
+      claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

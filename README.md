@@ -103,14 +103,27 @@ uv run python scripts/check_story.py         # story.json, every figure recomput
 ## The essay
 
 `viz/geschichte.html` ("Das unabsichtliche Selbstporträt") is a German
-long-form piece built on the same graph, linked from the top of the atlas:
-five chapters and a postscript, each around one chart -- the most-cited
-entries (no person among them), the communities as a chord diagram and a
-volume-by-community table, hubs against bridges, every dated life as a
-stratigraphy of the communities, and the references the resolver refused
-to decide. All figures in the text come from `story.json`
-(`scripts/build_story.py`), never from the HTML; the community names are
-the one hand-written input (`pipeline/community_labels.json`).
+analysis of the atlas, linked from its top: five chapters, each around one
+chart, that walk the reader through what the cross-references show.
+
+1. *Zitationshäufigkeit* -- the most-cited entries are concepts; no person
+   is among the top hubs, and a third of all entries is never cited.
+2. *Strukturen und Zentren* -- the Leiden regions of the graph as a chord
+   diagram of who cites whom, and a volume-by-region table showing that the
+   regions are not an artefact of the alphabet (Cramér's V).
+3. *Laute Zentren, leise Brücken* -- citations against betweenness: the
+   quiet bridges, and a region on Indian and East Asian thought that cites
+   outward far more than it is cited back.
+4. *Zeitachse der Ideengeschichte* -- every dated life laid out by region;
+   with no dates in the clustering, the regions sort into the order in
+   which the history of philosophy is taught.
+5. *Uneindeutigkeit* -- the references the resolver refused to decide:
+   ambiguous concepts, names shared by several people, one article behind
+   many headwords.
+
+All figures in the text come from `story.json` (`scripts/build_story.py`),
+never from the HTML; the region names are the one hand-written input
+(`pipeline/community_labels.json`).
 
 The prose is written in `viz/geschichte.md` and rendered to
 `viz/geschichte.html` by `scripts/build_story_html.py`; edit the Markdown,
