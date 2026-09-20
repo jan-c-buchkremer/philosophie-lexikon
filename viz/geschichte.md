@@ -36,7 +36,7 @@ Die *Enzyklopädie Philosophie und Wissenschaftstheorie*, herausgegeben von Jür
 
 Jeder dieser Pfeile ist eine redaktionelle Entscheidung: *Hier*, sagt er, *gehört ein anderer Artikel dazu.* Niemand hat diese Entscheidungen als Ganzes geplant. Sie wurden über Jahrzehnte von Dutzenden Autorinnen und Autoren getroffen, Artikel für Artikel, ohne Blick auf ein Gesamtbild. Legt man sie übereinander, entsteht ein Graph mit {nodes} Knoten und {edges} gerichteten Kanten, in dem jeder Artikel ein Punkt ist und jeder Pfeil eine Linie. Der [Atlas](index.html) zeigt diesen Graphen als Karte.
 
-So konstruiert sich aus den Daten eine Landkarte der Philosophiegeschichte, samt Schulen, Epochengrenzen und den Stellen, an denen sich das Fach bis heute nicht auf einen Begriff einigen kann. Genauere Beobachtung zeigt
+So konstruiert sich aus den Daten eine Landkarte der Philosophiegeschichte, samt Schulen, Epochengrenzen und den Stellen, an denen sich das Fach bis heute nicht auf die Definition bestimmter Begriffe einigen kann. Wir schauen uns diese Landkarte und die Daten, aus denen sie entsteht, nun genauer an.
 
 ## Kapitel 1 · Zitationshäufigkeit
 
@@ -53,7 +53,7 @@ Das ist zunächst eine Eigenschaft der Gattung. Ein Sachlexikon verweist auf Sac
 
 ## Kapitel 2 · Strukturen und Zentren
 
-Die Bände sind alphabetisch geordnet. Das hilft, um Artikel zu finden, schafft aber keine relevanten Zusammenhänge zwischen den Einträgen. Die zweite Ordnung steckt in der Struktur des Graphen. Mithilfe eines Betweenness-Algorithmus aus der Graphentheorie lässt sich der Atlas in Gruppen von Artikeln ordnen, die einander häufiger zitieren als den Rest. Er findet {communities} solcher Regionen, von der größten (*{largestComm}*, {largestSize} Einträge) bis zur kleinsten (*{smallestComm}*, {smallestSize}). Die Namen der Regionen sind durch die populärsten Artikel bestimmt.
+Die Bände sind alphabetisch geordnet. Das hilft, um Artikel zu finden, schafft aber keine relevanten Zusammenhänge zwischen den Einträgen. Die zweite Ordnung steckt in der Struktur des Graphen. Mithilfe des Leiden-Algorithmus aus der Graphentheorie lässt sich der Atlas in Gruppen von Artikeln ordnen, die einander häufiger zitieren als den Rest. Er findet {communities} solcher Regionen, von der größten (*{largestComm}*, {largestSize} Einträge) bis zur kleinsten (*{smallestComm}*, {smallestSize}). Die Namen der Regionen sind von Hand vergeben.
 
 ::: fig fig-chord wide
 Verweise zwischen den Regionen. Ein Band läuft von der zitierenden zur zitierten Region, die Spitze zeigt die Richtung; die Breite ist die Zahl der Verweise. Eine Region berühren, um nur ihre Bänder zu sehen. Verweise innerhalb einer Region – {internalPct} aller – sind weggelassen.
@@ -86,13 +86,13 @@ Die Autorinnen und Autoren der Artikel über indisches und chinesisches Denken h
 
 ## Kapitel 4 · Zeitachse der Ideengeschichte
 
-In die Berechnung der Regionen ist kein einziges Datum eingegangen. Der Algorithmus kennt nur die Verweise. Trotzdem lässt sich mithilfe der enthaltenen Jahreszahlen fragen, ob die Regionen etwas mit Zeit zu tun haben. Zum Beispiel: *„Kant, Immanuel, Königsberg 22. April 1724, †ebd. 12. Febr. 1804“*. Technisch lässt sich durch das Todeszeichen (Kreuz) diese Art von Daten finden. Für {dated} Einträge ließen sich Geburts- und Sterbejahr auf diese Weise lesen: {datedBio} der {bioTotal} Biographien ({datedPct}), dazu {datedOther} Personen, die das Lexikon aus formalen Gründen nicht als Biographie führt, wie zum Beispiel Sokrates, der keine Werke hinterließ und deshalb keinen *Werke:*-Abschnitt hat. Einträge, bei denen der Text unsicher ist („um 1214 oder 1219“), wurden außen vor gelassen. Damit lässt sich der Zusammenhang der Biographiedaten aus dem Text mit den Strukturdaten des Graphen darstellen.
+In die Berechnung der Regionen ist kein einziges Datum eingegangen, denn der Algorithmus kennt nur die Verweise. Trotzdem lässt sich mithilfe der enthaltenen Jahreszahlen fragen, ob die Regionen etwas mit der Zeit zu tun haben. Zum Beispiel: *„Kant, Immanuel, Königsberg 22. April 1724, †ebd. 12. Febr. 1804“*. Dafür durchsucht das Programm die Textdaten nach dem Todeszeichen (Kreuz). Für {dated} Einträge ließen sich Geburts- und Sterbejahr auf diese Weise lesen: {datedBio} der {bioTotal} Biographien ({datedPct}), dazu {datedOther} Personen, die das Lexikon aus formalen Gründen nicht als Biographie führt, wie zum Beispiel Sokrates, der keine Werke hinterließ und deshalb keinen *Werke:*-Abschnitt hat. Einträge, bei denen der Text unsicher ist („um 1214 oder 1219“), wurden außen vor gelassen. Damit lässt sich der Zusammenhang der Biographiedaten aus dem Text mit den Strukturdaten des Graphen darstellen.
 
 ::: fig fig-strata wide
 Jede Zeile eine Region im Atlas, jede Linie ein Leben von der Geburt bis zum Tod, sortiert nach dem Median des Geburtsjahrs. Hier ist die Zeitachse teilweise gedehnt, um die Lesbarkeit zu verbessern.
 :::
 
-Wir sehen eine Anordnung nach Epochen. Oben *{firstRow}* mit dem Median {firstMedian}, unten *{lastRow}* mit dem Median {lastMedian}. Dazwischen, in dieser Reihenfolge: Scholastik, Aufklärung, Physik, Naturphilosophie, Kant, Hegel, Wissenschaftstheorie, Mengenlehre. Es ist, bis auf Nuancen, die Reihenfolge, in der Philosophiegeschichte gelehrt wird, die aber nicht explizit in den Daten steht. Datenanalyse und Darstellung beleuchten diesen Zusammenhang.
+Wir sehen eine Anordnung nach Epochen. Oben *{firstRow}* mit dem Median {firstMedian}, unten *{lastRow}* mit dem Median {lastMedian}. Dazwischen, in dieser Reihenfolge: Scholastik, Aufklärung, Physik, Naturphilosophie, Kant, Hegel, Wissenschaftstheorie, Mengenlehre. Es ist, bis auf Nuancen, die Reihenfolge, die in der Philosophiegeschichte gelehrt wird, aber nicht explizit in den Daten steht. Datenanalyse und Darstellung beleuchten diesen Zusammenhang.
 
 Von den Personen der Antike liegen {eraAntikeTopPct} in einer einzigen Region (*{eraAntikeTop}*); vom Mittelalter {eraMittelalterTopPct} in *{eraMittelalterTop}*; die Frühe Neuzeit hat ihren Schwerpunkt in *{eraFruehTop}*, das 20. Jahrhundert in *{eraZwanzigTop}*. Das 19. Jahrhundert ist die breiteste Schicht – {eraNeunzehn} Personen, {eraNeunzehnPct} aller datierten – und die am wenigsten konzentrierte: das Jahrhundert, in dem sich die Philosophie in Fächer teilte. Wir sehen auch bedeutende Sekundärliteratur über bestimmte philosophische Schulen und deren Wiederaufleben, Jahrhunderte nach ihren Kernphasen.
 
