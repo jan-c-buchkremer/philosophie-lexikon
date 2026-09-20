@@ -7,7 +7,7 @@
  * ribbons; the list beside the ring names the strongest one-way flows.
  */
 import { communityColor, communityLabel, fmt } from '../story-data.js';
-import { INK_EDGE, TEXT_FAINT, TEXT_SOFT, escapeHtml, tip } from './chart-common.js';
+import { INK_EDGE, TEXT_FAINT, TEXT_SOFT, escapeHtml, labelLines, shortLabel, stackLines, textWidth, tip } from './chart-common.js';
 
 export function renderCommunityChord(container, graph, story) {
   container.innerHTML = '';
@@ -20,9 +20,16 @@ export function renderCommunityChord(container, graph, story) {
   const side = wrap.append('div').attr('class', 'chord-side');
 
   const width = Math.max(320, Math.min(640, ringBox.node().getBoundingClientRect().width));
-  // Room for the longest label at the horizontal positions, where it
-  // cannot lean away from its neighbours.
-  const outer = width / 2 - (width < 480 ? 74 : 124);
+  const fontSize = width < 480 ? 9 : 10.5;
+  // Labels run radially, so at the top and bottom of the ring they stick
+  // straight out and the margin must hold the longest one. Long names are
+  // broken at their conjunction; the margin is measured, not guessed.
+  const lines = d3.range(k).map((i) => {
+    const label = communityLabel(graph, i);
+    return width < 480 ? [shortLabel(label, 18)] : labelLines(label);
+  });
+  const longest = textWidth(container, lines.flat(), fontSize);
+  const outer = width / 2 - longest - 14;
   const innerR = outer - 12;
   const svg = ringBox.append('svg').attr('width', width).attr('height', width)
     .attr('viewBox', `${-width / 2} ${-width / 2} ${width} ${width}`).attr('role', 'img');
@@ -44,14 +51,10 @@ export function renderCommunityChord(container, graph, story) {
 
   groups.append('text')
     .each((d) => { d.angle = (d.startAngle + d.endAngle) / 2; })
-    .attr('dy', '0.35em')
     .attr('transform', (d) => `rotate(${(d.angle * 180) / Math.PI - 90}) translate(${outer + 8}) ${d.angle > Math.PI ? 'rotate(180)' : ''}`)
     .attr('text-anchor', (d) => (d.angle > Math.PI ? 'end' : 'start'))
-    .attr('fill', TEXT_SOFT).attr('font-family', 'var(--sans)').attr('font-size', width < 480 ? 9 : 10.5)
-    .text((d) => {
-      const label = communityLabel(graph, d.index);
-      return width < 480 && label.length > 18 ? `${label.slice(0, 17)}…` : label;
-    });
+    .attr('fill', TEXT_SOFT).attr('font-family', 'var(--sans)').attr('font-size', fontSize)
+    .each(function (d) { stackLines(d3.select(this), lines[d.index]); });
 
   const outgoing = matrix.map((row) => d3.sum(row));
   const incoming = matrix[0].map((_, j) => d3.sum(matrix, (row) => row[j]));
