@@ -578,7 +578,7 @@ def copy_frontend(src: Path, dest: Path):
     same spirit as export_dataset.py: the artifact stands alone.
     """
     dest.mkdir(parents=True, exist_ok=True)
-    for item in ("index.html", "geschichte.html", "style.css", "js", "img"):
+    for item in ("index.html", "geschichte.html", "style.css", "js"):
         s = src / item
         d = dest / item
         if not s.exists():
